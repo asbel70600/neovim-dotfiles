@@ -1,3 +1,5 @@
+-- The settings for this stuff are not in an opt table
+-- but in a global vim variable
 local chadtree_settings = {
     ["view.width"] = 30,
 }

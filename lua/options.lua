@@ -19,7 +19,8 @@ vim.opt.number = true
 vim.opt.relativenumber = true
 vim.opt.showcmd = true
 vim.opt.cmdheight = 1
-vim.opt.syntax = "enable"
+vim.opt.syntax = "off"
+vim.opt.filetype = "off"
 vim.opt.termguicolors = true
 vim.opt.laststatus = 10
 vim.opt.showmode = true
@@ -66,6 +67,13 @@ vim.opt.incsearch = true
 vim.opt.ignorecase = true
 vim.opt.smartcase = true
 
+
+-- Folding with treesitter
+-- vim.opt.foldmethod = 'expr'
+-- vim.opt.foldexpr = 'nvim_treesitter#foldexpr()'
+-- vim.opt.foldlevel = 1
+-- vim.g.nofoldenable = true
+
 -- Neovide
 if vim.g.neovide then
     vim.opt.guifont = "JetBrainsMonoNL NFM SemiBold:h18"
@@ -80,6 +88,10 @@ if vim.g.neovide then
     vim.g.neovide_profiler = false
 end
 -- vim.g.neovide_cursor_trail_size = 1.8
+
+vim.g.netrw_preview   = 1
+vim.g.netrw_liststyle = 3
+vim.g.netrw_winsize   = 30
 
 -- try
 --     set undofile
@@ -96,13 +108,6 @@ end
 -- vim.opt.omnifunc = "syntaxcomplete#Complete"
 --echo nvim_treesitter#statusline(90)  " 90 can be any length
 --module->expression_statement->call->identifier
--- Folding with treesitter
--- vim.opt.foldmethod = 'expr'
--- vim.opt.Folding = false
--- vim.opt.foldexpr = 'nvim_treesitter#foldexpr()'
--- let g:netrw_winsize=25
--- let g:netrw_preview=1
---
 --  autochdir
 --  autowrite
 --  autowriteall
@@ -119,8 +124,6 @@ end
 -- vim.opt.wildchar = "<Tab>"
 -- vim.opt.nohlsearch = true
 -- vim.opt.noshowmatch = true
--- vim.opt.filetype = true
--- vim.opt.filetype_plugin = true
 -- vim.opt.filetype_indent = true
 -- vim.opt.syntax = true
 -- vim.opt.fixdel = true

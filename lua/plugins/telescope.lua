@@ -1,9 +1,5 @@
 return {
     "nvim-telescope/telescope.nvim",
-    branch = "0.1.x",
-    dependencies = {
-        "nvim-lua/plenary.nvim",
-    },
     opts = {
         extensions = {
             fzf = {
@@ -24,7 +20,6 @@ return {
         require("telescope").load_extension("fzf")
         require("telescope").load_extension("ui-select")
         require("telescope").load_extension("workspaces")
-
         require("telescope").setup({
             defaults = {
                 mappings = {
@@ -40,5 +35,13 @@ return {
             },
         })
 
+        require("mappings")
+        MY_KEYMAPS.OnTelescopeReady()
+
     end,
+    branch = "0.1.x",
+    dependencies = {
+        "nvim-lua/plenary.nvim",
+    },
+    enabled = true,
 }

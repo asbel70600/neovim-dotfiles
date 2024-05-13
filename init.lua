@@ -1,4 +1,5 @@
 vim.g.mapleader = " "
+
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not (vim.uv or vim.loop).fs_stat(lazypath) then
     vim.fn.system({
@@ -11,12 +12,9 @@ if not (vim.uv or vim.loop).fs_stat(lazypath) then
     })
 end
 vim.opt.rtp:prepend(lazypath)
-
-
 require("lazy").setup("plugins", { change_detection = { enabled = false } })
 
 require("mappings")
 require("options")
 require("plugins")
--- require("autocmds
--- require("telescope").load_extension("fzf")
+require("autocmds")

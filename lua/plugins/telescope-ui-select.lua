@@ -1,6 +1,6 @@
 return {
     "nvim-telescope/telescope-ui-select.nvim",
-    enabled = true,
+
     config = function()
         require("telescope").setup({
             extensions = {
@@ -8,4 +8,6 @@ return {
             },
         })
     end,
+
+    enabled = true,
 }

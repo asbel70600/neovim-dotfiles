@@ -14,8 +14,9 @@ return {
             remove = {},
             rename = {},
             open_pre = {},
-            open = { "lua require('persistence').load()", "Telescope buffers" },
+            open = {},
         },
     },
     enabled = true,
+    event = "VeryLazy",
 }

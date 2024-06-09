@@ -22,14 +22,33 @@ vim.keymap.set("n", "<C-Down>", ":resize -2<CR>", opts)
 vim.keymap.set("n", "<C-Left>", ":vertical resize -2<CR>", opts)
 vim.keymap.set("n", "<C-Right>", ":vertical resize +2<CR>", opts)
 vim.keymap.set("n", "<C-TAB>", "<cmd>bn<cr>", opts)
+vim.keymap.set("n", "<C-.>", "<cmd>bn<cr>", opts)
 -- vim.keymap.set("n", "<C-.>", "<cmd>bn<cr>", opts)
 vim.keymap.set("n", "<C-BS>", "<cmd>bd<cr>", opts)
 vim.keymap.set("n", "<F3>", "<cmd>lua require('conform').format({bufnr = vim.fn.bufnr('%')})<cr>", opts)
 vim.keymap.set("n", "<leader>ql", [[<cmd>lua require("persistence").load({ last = true })<cr>]], {})
 vim.keymap.set("n", "<C-A>", "<cmd>CHADopen<cr>", opts)
+vim.keymap.set("n", "<C-;>", ":!",{})
 
-vim.keymap.set("t", "<C-O>", "<C-\\><C-N>")
-vim.keymap.set("t", "<C-TAB>", "<C-\\><C-N><cmd>bn<cr>")
+vim.keymap.set("t", "<C-O>", "<C-\\><C-N><C-O>",opts)
+vim.keymap.set("t", "<C-A>", "<cmd>CHADopen<cr>", opts)
+vim.keymap.set("t", "<Esc>", "<C-\\><C-N>",opts)
+vim.keymap.set("t", "<A-j>", "<C-\\><C-N><C-O>",opts)
+vim.keymap.set("n", "<A-j>",
+    function()
+        for _,value in pairs(vim.api.nvim_list_bufs()) do
+            local buffername = vim.api.nvim_buf_get_name(value)
+            local name = string.match(buffername,"term:///")
+            if name then
+                vim.cmd("buffer " .. value)
+                return 0
+            end
+        end
+        vim.cmd("terminal")
+        vim.cmd("normal i")
+    end
+    ,opts)
+vim.keymap.set("t", "<C-TAB>", "<C-\\><C-N><cmd>bn<cr>",opts)
 
 -- On LSP attach
 MY_KEYMAPS.OnLSPAttach = function(opts)
@@ -68,14 +87,14 @@ MY_KEYMAPS.OnLSPAttach = function(opts)
     end, opts)
 end
 
-MY_KEYMAPS.OnLuasnipAttach = function()
+MY_KEYMAPS.OnLuasnipAttach = function(opts)
     local ls = require("luasnip")
-    vim.keymap.set({ "i", "s" }, "<C-k>", function()
-            ls.jump(1)
+    vim.keymap.set({ "i", "s" }, "<A-TAB>", function()
+        ls.jump(1)
     end, { silent = true })
 
-    vim.keymap.set({ "i", "s" }, "<C-j>", function()
-            ls.jump(-1)
+    vim.keymap.set({ "i", "s" }, "<S-A-TAB>", function()
+        ls.jump(-1)
     end, { silent = true })
 
     vim.keymap.set({ "i", "s" }, "<C-.>", function()
@@ -136,6 +155,34 @@ MY_KEYMAPS.treesitterTextObjectKeymaps = {
     ["ic"] = "@call.inner",
 }
 
+MY_KEYMAPS.OnDapAdapterReady = function ()
+    -- vim.keymap.set('n', '<Leader>dl', function() require('dap').run_last() end,opts)
+    -- vim.keymap.set('n', '<Leader>dd', function() require('dap').set_breakpoint() end,opts)
+    vim.keymap.set('n', '<F5>', function() require('dap').continue() end,opts)
+    vim.keymap.set('n', '<F10>', function() require('dap').step_over() end,opts)
+    vim.keymap.set('n', '<F11>', function() require('dap').step_into() end,opts)
+    vim.keymap.set('n', '<F12>', function() require('dap').step_out() end,opts)
+    vim.keymap.set('n', '<Leader>db', function() require('dap').toggle_breakpoint() end,opts)
+    vim.keymap.set('n', '<Leader>dm', function() require('dap').set_breakpoint(nil, nil, vim.fn.input('Log point message: ')) end,opts)
+    vim.keymap.set('n', '<Leader>dr', function() require('dap').repl.open() end,opts)
+    vim.keymap.set({'n', 'v'}, '<Leader>dh', function()
+      require('dap.ui.widgets').hover()
+    end,opts)
+    vim.keymap.set({'n', 'v'}, '<Leader>dp', function()
+      require('dap.ui.widgets').preview()
+    end,opts)
+    vim.keymap.set('n', '<Leader>df', function()
+      local widgets = require('dap.ui.widgets')
+      widgets.centered_float(widgets.frames)
+    end,opts)
+    vim.keymap.set('n', '<Leader>ds', function()
+      local widgets = require('dap.ui.widgets')
+      widgets.centered_float(widgets.scopes)
+    end,opts)
+end
+
 -- MY_KEYMAPS.OnTelescopeReady()
--- MY_KEYMAPS.OnLSPAttach(opts)
+MY_KEYMAPS.OnLSPAttach(opts)
+MY_KEYMAPS.OnLuasnipAttach(opts)
+-- MY_KEYMAPS.OnDapAdapterReady(opts)
 -- vim.keymap.set("n", "<S-Enter>", "<cmd>Vexplore 30<cr>",opts)

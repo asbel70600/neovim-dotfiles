@@ -6,15 +6,15 @@ vim.opt.clipboard = "unnamedplus"
 vim.cmd.colorscheme("kanagawa-wave")
 
 -- Questions
-vim.opt.inccommand = "split"
+-- vim.opt.inccommand = "split"
 vim.opt.hidden = true
 vim.opt.ttyfast = true
 vim.opt.list = true
 vim.opt.matchtime = 1
 
 -- Visual
-vim.opt.scrolloff = 8
-vim.opt.sidescrolloff = 8
+vim.opt.scrolloff = 3
+vim.opt.sidescrolloff = 5
 vim.opt.number = true
 vim.opt.relativenumber = true
 vim.opt.showcmd = true
@@ -69,11 +69,11 @@ vim.opt.smartcase = true
 
 
 -- Folding with treesitter
--- vim.opt.foldmethod = 'expr'
--- vim.opt.foldexpr = 'nvim_treesitter#foldexpr()'
--- vim.opt.foldlevel = 1
--- vim.g.nofoldenable = true
+vim.opt.foldmethod = 'expr'
+vim.opt.foldexpr = 'nvim_treesitter#foldexpr()'
+vim.opt.foldlevel = 1
 
+-- vim.o.nofoldenable = true
 -- Neovide
 if vim.g.neovide then
     vim.opt.guifont = "JetBrainsMonoNL NFM SemiBold:h18"

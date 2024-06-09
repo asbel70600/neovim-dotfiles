@@ -4,6 +4,7 @@ return {
     config = function()
     require("neodev").setup({})
         local lspconf = require("lspconfig")
+        lspconf.kotlin_language_server.setup({})
         lspconf.harper_ls.setup({
             settings = {
                 ["harper-ls"] = {

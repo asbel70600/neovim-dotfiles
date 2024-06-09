@@ -1,5 +1,13 @@
 require("mappings")
 
+-- vim.api.nvim_create_autocmd("VimEnter", {
+--     callback = function()
+--         if vim.fn.argc() == 0 then
+--             require("telescope.builtin").
+--         end
+--     end,
+-- })
+
 vim.api.nvim_create_autocmd("LspAttach", {
     group = vim.api.nvim_create_augroup("UserLspConfig", {}),
     callback = function(ev)
@@ -11,6 +19,15 @@ vim.api.nvim_create_autocmd("LspAttach", {
 
 vim.api.nvim_create_autocmd("CmdlineEnter", { command = [[set hlsearch]] })
 vim.api.nvim_create_autocmd("CmdlineLeave", { command = [[set nohlsearch]] })
+
+vim.api.nvim_create_autocmd("BufEnter", {
+    callback = function(ev)
+        local name = string.match(ev.file,"term:///")
+        if name then
+            vim.cmd("normal i")
+        end
+    end,
+})
 
 -- vim.api.nvim_create_autocmd("BufEnter", {
 --     nested = true,
@@ -25,7 +42,7 @@ vim.api.nvim_create_autocmd("CmdlineLeave", { command = [[set nohlsearch]] })
 --     callback = function(ev)
 --         print(vim.inspect(ev))
 --         -- local name = string.match(ev.file,"__Mundo_")
--- 
+--
 --         -- if name then
 --         --     local buffer = ev.buf
 --         --     vim.bo[buffer].guifont = "Hack:h12"

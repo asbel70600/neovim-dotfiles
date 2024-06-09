@@ -8,5 +8,5 @@ return {
         save_empty = false, -- don't save if there are no open file buffers
     },
     event = "BufReadPre",
-    enabled = true,
+    enabled = false,
 }

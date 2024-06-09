@@ -1,6 +1,11 @@
 -- maxwidth = function() return math.floor(0.45 * vim.o.columns) end
 return {
     "hrsh7th/nvim-cmp",
+    opts = {
+        sources = {
+            {},
+        },
+    },
     config = function()
         local lspkind = require("lspkind")
         local cmp = require("cmp")
@@ -39,12 +44,11 @@ return {
                 ["<C-e>"] = cmp.mapping.abort(),
                 ["<Tab>"] = cmp.mapping.confirm({ select = true }),
             }),
-            sources = cmp.config.sources({
-                { name = "nvim_lsp" },
+            sources = {
                 { name = "luasnip" },
-            }, {
+                { name = "nvim_lsp" },
                 { name = "buffer" },
-            }),
+            },
         })
 
         -- CMDLINE SETUP
@@ -78,6 +82,7 @@ return {
                 { name = "buffer" },
             }),
         })
+
         require("cmp_git").setup()
         local cmp_autopairs = require("nvim-autopairs.completion.cmp")
         cmp.event:on("confirm_done", cmp_autopairs.on_confirm_done())

@@ -1,12 +1,8 @@
 return {
-    "mfussenegger/nvim-jdtls",
-    dependencies = {
-        "mfussenegger/nvim-dap",
-    },
-    ft = { "java" },
     config = function()
         local capabilities = require("cmp_nvim_lsp").default_capabilities()
         local project_name = vim.fn.fnamemodify(vim.fn.getcwd(), ":p:h:t")
+
         local config = {
             cmd = {
                 "java",
@@ -22,9 +18,9 @@ return {
                 "--add-opens",
                 "java.base/java.lang=ALL-UNNAMED",
                 "-jar",
-                "/home/home/.xdg/local/share/nvim/mason/packages/jdtls/plugins/org.eclipse.equinox.launcher_1.6.800.v20240330-1250.jar",
+                "/usr/share/java/jdtls/plugins/org.eclipse.equinox.launcher_1.6.800.v20240513-1750.jar",
                 "-configuration",
-                "/home/home/.xdg/local/share/nvim/mason/packages/jdtls/config_linux",
+                "/usr/share/java/jdtls/config_linux",
                 "-data",
                 vim.fn.expand("~/.xdg/cache/jdtls/workspace") .. project_name,
             },
@@ -33,12 +29,35 @@ return {
                 java = {},
             },
             init_options = {
-                bundles = {"/usr/share/java-debug/com.microsoft.java.debug.plugin.jar","/usr/share/java-debug/com.microsoft.java.debug.core.jar"},
+                bundles = {},
             },
             capabilities = capabilities,
         }
+
+        local bundles = {
+            vim.fn.glob(
+                "/home/home/Documents/sources/java-debug/com.microsoft.java.debug.plugin/target/com.microsoft.java.debug.plugin-0.52.0.jar",
+                true
+            ),
+        }
+
+        vim.list_extend(
+            bundles,
+            vim.split(vim.fn.glob("/home/home/Documents/sources/vscode-java-test/server/*.jar", true), "\n")
+        )
+
+        config["init_options"] = {
+            bundles = bundles,
+        }
+
         require("jdtls").start_or_attach(config)
     end,
+    enabled = true,
+    "mfussenegger/nvim-jdtls",
+    dependencies = {
+        "mfussenegger/nvim-dap",
+    },
+    ft = { "java" },
 }
 
 -- return {
@@ -59,7 +78,6 @@ return {
 --         require("jdtls").start_or_attach(config)
 --     end,
 --     enabled = true,
---     event = "VeryLazy",
 -- require("jdtls").start_or_attach({
 --     -- See `:help vim.lsp.start_client` for an overview of the supported `config` options.
 --     -- The command that starts the language server

@@ -3,9 +3,21 @@ return {
         "Shatur/neovim-ayu",
     },
     {
+        "folke/tokyonight.nvim",
+    },
+    {
         "rebelot/kanagawa.nvim",
-        lazy = false,
-        priority = 1000,
-        opts = {},
+    },
+    {
+        "rose-pine/neovim",
+    },
+    {
+        "EdenEast/nightfox.nvim",
+    },
+    {
+        "projekt0n/github-nvim-theme",
+    },
+    {
+        "yorik1984/newpaper.nvim",
     },
 }

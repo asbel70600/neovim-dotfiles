@@ -1,15 +1,17 @@
--- maxwidth = function() return math.floor(0.45 * vim.o.columns) end
 return {
     "hrsh7th/nvim-cmp",
-    opts = {
-        sources = {
-            {},
-        },
+    event = {
+        "LspAttach",
+        "CmdlineEnter",
     },
     config = function()
         local lspkind = require("lspkind")
         local cmp = require("cmp")
-        -- GENERAL SETUP
+        local luasnip = require("luasnip")
+        require("cmp_git").setup()
+        local cmp_autopairs = require("nvim-autopairs.completion.cmp")
+        cmp.event:on("confirm_done", cmp_autopairs.on_confirm_done())
+
         cmp.setup({
             ---@diagnostic disable-next-line: missing-fields
             formatting = {
@@ -19,6 +21,13 @@ return {
                     maxwidth = 50,
                     ellipsis_char = "...",
                     show_labelDetails = true,
+                    menu = {
+                        buffer = "[Buffer]",
+                        nvim_lsp = "[LSP]",
+                        luasnip = "[Snippet]",
+                        nvim_lua = "[Lua]",
+                        latex_symbols = "[Latex]",
+                    },
                     -- The function below will be called before any actual modifications from lspkind
                     -- so that you can provide more controls on popup customization. (See [#30](https://github.com/onsails/lspkind-nvim/pull/30))
                     --       before = function (entry, vim_item)
@@ -42,12 +51,47 @@ return {
                 ["<C-f>"] = cmp.mapping.scroll_docs(4),
                 ["<C-Space>"] = cmp.mapping.complete(),
                 ["<C-e>"] = cmp.mapping.abort(),
-                ["<Tab>"] = cmp.mapping.confirm({ select = true }),
+
+                ["<Tab>"] = cmp.mapping(function(fallback)
+                    if cmp.visible() then
+                        if luasnip.expandable() then
+                            luasnip.expand()
+                        else
+                            cmp.confirm({
+                                select = true,
+                            })
+                        end
+                    else
+                        fallback()
+                    end
+                end),
+
+                ["<C-N>"] = cmp.mapping(function(fallback)
+                    if cmp.visible() then
+                        cmp.select_next_item()
+                    elseif luasnip.locally_jumpable(1) then
+                        luasnip.jump(1)
+                    else
+                        fallback()
+                    end
+                end, { "i", "s" }),
+
+                ["<C-P>"] = cmp.mapping(function(fallback)
+                    if cmp.visible() then
+                        cmp.select_prev_item()
+                    elseif luasnip.locally_jumpable(-1) then
+                        luasnip.jump(-1)
+                    else
+                        fallback()
+                    end
+                end, { "i", "s" }),
             }),
             sources = {
+                { name = "codeium" },
                 { name = "luasnip" },
                 { name = "nvim_lsp" },
                 { name = "buffer" },
+                { name = "nvim_lsp_signature_help" },
             },
         })
 
@@ -59,7 +103,40 @@ return {
             },
         })
         cmp.setup.cmdline(":", {
-            mapping = cmp.mapping.preset.cmdline(),
+            mapping = cmp.mapping.preset.cmdline({
+                ["<C-y>"] = {
+                    c = cmp.mapping.confirm({ select = false }),
+                },
+                ["<Tab>"] = {
+                    c = function()
+                        if cmp.visible() then
+                            cmp.select_next_item()
+                        else
+                            cmp.complete()
+                        end
+                    end,
+                },
+                ["<S-Tab>"] = {
+                    c = function()
+                        local cmp = require("cmp")
+                        if cmp.visible() then
+                            cmp.select_prev_item()
+                        else
+                            cmp.complete()
+                        end
+                    end,
+                },
+                ["<C-n>"] = {
+                    c = function(fallback)
+                        fallback()
+                    end,
+                },
+                ["<C-p>"] = {
+                    c = function(fallback)
+                        fallback()
+                    end,
+                },
+            }),
             sources = cmp.config.sources({
                 { name = "path" },
             }, {
@@ -83,9 +160,13 @@ return {
             }),
         })
 
-        require("cmp_git").setup()
-        local cmp_autopairs = require("nvim-autopairs.completion.cmp")
-        cmp.event:on("confirm_done", cmp_autopairs.on_confirm_done())
+        -- require("cmp").setup.filetype({ "dap-repl", "dapui_watches", "dapui_hover" }, {
+        --     sources = {
+        --         { name = "dap" },
+        --     },
+        -- })
+
+
     end,
     dependencies = {
         "onsails/lspkind.nvim",
@@ -97,6 +178,18 @@ return {
         "L3MON4D3/LuaSnip",
         "saadparwaiz1/cmp_luasnip",
         "onsails/lspkind.nvim",
+        "rcarriga/cmp-dap",
+        "hrsh7th/cmp-nvim-lsp-signature-help",
     },
-    enabled = true,
 }
+
+--                ["<C-e>"] = cmp.mapping.abort(),
+--                ["<CR>"] = cmp.mapping.confirm({}),
+--                ["<Tab>"] = cmp.mapping.select_next_item({}),
+--                ["<S-Tab>"] = cmp.mapping.select_prev_item({}),
+--                ["<C-N>"] = cmp.mapping(function(fallback)
+--                    fallback()
+--                end),
+--                ["<C-P>"] = cmp.mapping(function(fallback)
+--                    fallback()
+--                end),

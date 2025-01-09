@@ -1,0 +1,2 @@
+local function configLsp()
+end

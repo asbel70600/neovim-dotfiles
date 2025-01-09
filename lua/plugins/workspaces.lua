@@ -1,5 +1,6 @@
 -- https://github.com/natecraddock/workspaces.nvim
 return {
+    lazy = true,
     "natecraddock/workspaces.nvim",
     opts = {
         path = vim.fn.stdpath("data") .. "/workspaces", -- ~/.local/share/nvim/workspaces
@@ -18,5 +19,4 @@ return {
         },
     },
     enabled = true,
-    event = "VeryLazy",
 }

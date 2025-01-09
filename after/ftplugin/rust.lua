@@ -1,0 +1,1 @@
+/home/asbel/.xdg/config/nvim/lua/plugins/rust/filetype.lua

@@ -1,21 +1,14 @@
 return {
-    "williamboman/mason-lspconfig.nvim",
-    dependencies = { "williamboman/mason.nvim" },
-    opts = {
-        enshure_installed = {
-            "lua_ls",
-            "clangd",
-            "bashls",
-            "pyright",
-            "rust_analyzer",
-            "phpactor",
-            "java_language_server",
-        },
-    },
+    event = { "BufReadPre", "BufNewFile" },
     config = function()
         require("mason").setup()
         require("mason-lspconfig").setup()
+
         local capabilities = require("cmp_nvim_lsp").default_capabilities()
+        capabilities.textDocument.foldingRange = {
+            dynamicRegistration = false,
+            lineFoldingOnly = true,
+        }
 
         require("mason-lspconfig").setup_handlers({
             function(server_name)
@@ -24,25 +17,19 @@ return {
                 })
             end,
 
-            ["kotlin_language_server"] = function()
-                require("lspconfig").kotlin_language_server.setup({})
-            end,
+            ["rust_analyzer"] = function() end,
 
-            ["jdtls"] = function()
-                vim.print("jdtls isn't doing anithing")
-            end
-            -- Next, you can provide a dedicated handler for specific servers.
-            -- For example, a handler override for the `rust_analyzer`:
-            -- ["rust_analyzer"] = function ()
-            --     require("rust-tools").setup {}
-            -- end
+            ["sqls"] = function()
+                require("lspconfig").sqls.setup({
+                    on_attach = function(client, bufnr)
+                        require("sqls").on_attach(client, bufnr)
+                    end,
+                    capabilities = capabilities,
+                })
+            end,
         })
     end,
     enabled = true,
+    "williamboman/mason-lspconfig.nvim",
+    dependencies = { "williamboman/mason.nvim" },
 }
-
--- local coq = require("coq")
--- require("mason-lspconfig").setup_handlers({
---     function(server_name)
---         require("lspconfig")[server_name].setup( coq.lsp_ensure_capabilities() )
---     end,

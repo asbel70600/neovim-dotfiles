@@ -1,4 +1,5 @@
 return {
+    lazy = true,
     "folke/neodev.nvim",
     dependencies = {
         "hrsh7th/nvim-cmp",
@@ -25,5 +26,4 @@ return {
         --         end,
     },
     enabled = true,
-    event = "VeryLazy",
 }

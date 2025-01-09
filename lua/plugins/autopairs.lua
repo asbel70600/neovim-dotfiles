@@ -1,7 +1,10 @@
 -- https://github.com/windwp/nvim-autopairs
 return {
     "windwp/nvim-autopairs",
-    opts = {},
+    opts = {
+        map_c_w = true,
+        map_c_h = true,
+    },
     event = "InsertEnter",
     enabled = true,
     -- config = function()

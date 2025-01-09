@@ -1,36 +1,56 @@
-require("mappings")
+vim.api.nvim_create_autocmd("TermEnter", { command = [[set timeoutlen=100]] })
+vim.api.nvim_create_autocmd("TermLeave", { command = [[set timeoutlen=800]] })
+vim.api.nvim_create_autocmd("CmdlineEnter", { command = [[set hlsearch]] })
+vim.api.nvim_create_autocmd("CmdlineLeave", { command = [[set nohlsearch]] })
+vim.api.nvim_create_autocmd(
+    { "BufRead", "BufNewFile" },
+    { pattern = { "*config/hypr/*.conf" }, command = [[set makeprg=hyprctl\ reload]] }
+)
 
--- vim.api.nvim_create_autocmd("VimEnter", {
---     callback = function()
---         if vim.fn.argc() == 0 then
---             require("telescope.builtin").
---         end
---     end,
--- })
+vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
+    pattern = { "*.slint" },
+    command = [[set ft=slint]],
+})
 
-vim.api.nvim_create_autocmd("LspAttach", {
-    group = vim.api.nvim_create_augroup("UserLspConfig", {}),
-    callback = function(ev)
-        vim.bo[ev.buf].omnifunc = "v:lua.vim.lsp.omnifunc"
-        local opts = { buffer = ev.buf }
-        MY_KEYMAPS.OnLSPAttach(opts)
+vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
+    command = [[set nowrap]]
+})
+
+vim.api.nvim_create_autocmd("BufEnter", {
+    callback = function()
+        local currentb = vim.fn.bufname()
+        if string.len(currentb) == 0 then
+            vim.opt.hidden = false
+        else
+            vim.opt.hidden = true
+        end
     end,
 })
 
-vim.api.nvim_create_autocmd("CmdlineEnter", { command = [[set hlsearch]] })
-vim.api.nvim_create_autocmd("CmdlineLeave", { command = [[set nohlsearch]] })
-
 vim.api.nvim_create_autocmd("BufEnter", {
     callback = function(ev)
-        local name = string.match(ev.file,"term:///")
+        local name = string.match(ev.file, "term:///")
         if name then
             vim.cmd("normal i")
         end
     end,
 })
 
+
+vim.api.nvim_create_autocmd({'BufEnter', 'BufWinEnter'}, {
+		pattern = {"*.hl", "hypr*.conf"},
+		callback = function(event)
+				print(string.format("starting hyprls for %s", vim.inspect(event)))
+				vim.lsp.start {
+						name = "hyprlang",
+						cmd = {"hyprls"},
+						root_dir = vim.fn.getcwd(),
+				}
+		end
+})
+
 -- vim.api.nvim_create_autocmd("BufEnter", {
---     nested = true,
+--    nested = true,
 --     callback = function()
 --         if #vim.api.nvim_list_wins() == 1 and require("nvim-tree.utils").is_nvim_tree_buf() then
 --             vim.cmd("e dummie")

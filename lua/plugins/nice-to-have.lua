@@ -9,13 +9,9 @@ return {
     {
         "folke/flash.nvim",
         keys = {
-            { "<C-s>", mode = { "n", "x", "o" }, function() require("flash").jump() end,       desc = "Flash" },
-            { "\\",    mode = { "n", "x", "o" }, function() require("flash").treesitter() end, desc = "Flash Treesitter" },
+            { "<C-s>", mode = { "n", "x", "o" }, function() require("flash").jump() end,       desc = "[Flash] jump" },
+            { "\\",    mode = { "n", "x", "o" }, function() require("flash").treesitter() end, desc = "[Flash] node selection" },
         },
-    },
-    {
-        lazy = true,
-        "stevearc/dressing.nvim",
     },
     {
         "folke/todo-comments.nvim",
@@ -38,17 +34,22 @@ return {
     },
     {
         "mikavilpas/yazi.nvim",
-        keys = { { "<leader>;", function() require("yazi").yazi() end, desc = "Open the file manager" } },
+        keys = {
+            { "<leader>;", function() require("yazi").yazi() end,                     desc = "[Yazi] open in file's cwd" },
+            { "<leader>:", function() require("yazi").yazi(nil, vim.fn.getcwd()) end, desc = "[Yazi] open in nvim's cwd" },
+            { "<C-;>",     function() require("yazi").toggle() end,                   desc = "[Yazi] toggle" },
+        },
         opts = { open_for_directories = true },
     },
     {
         "tpope/vim-fugitive",
+        dependencies = { "stevearc/dressing.nvim" },
         keys = {
-            { "<leader>gs", mode = { "n" }, function() vim.cmd [[Git]] end,         desc = "Git status" },
-            { "<leader>gd", mode = { "n" }, function() vim.cmd [[Gdiffsplit]] end,  desc = "Git diff" },
-            { "<leader>gb", mode = { "n" }, function() vim.cmd [[Git blame]] end,   desc = "Git blame" },
-            { "<leader>gc", mode = { "n" }, function() vim.cmd [[Git commit]] end,  desc = "Git commit" },
-            { "<leader>gm", mode = { "n" }, function() vim.cmd [[Gdiffsplit!]] end, desc = "Git merge (3-way)" },
+            { "<leader>gs", mode = { "n" }, function() vim.cmd [[Git]] end,         desc = "[Git] status" },
+            { "<leader>gd", mode = { "n" }, function() vim.cmd [[Gdiffsplit]] end,  desc = "[Git] diff" },
+            { "<leader>gb", mode = { "n" }, function() vim.cmd [[Git blame]] end,   desc = "[Git] blame" },
+            { "<leader>gc", mode = { "n" }, function() vim.cmd [[Git commit]] end,  desc = "[Git] commit" },
+            { "<leader>gm", mode = { "n" }, function() vim.cmd [[Gdiffsplit!]] end, desc = "[Git] merge (3-way)" },
         },
         init = function()
             vim.api.nvim_create_autocmd("User", {

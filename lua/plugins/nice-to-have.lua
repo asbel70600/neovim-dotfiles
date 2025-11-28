@@ -45,20 +45,56 @@ return {
         "tpope/vim-fugitive",
         dependencies = { "stevearc/dressing.nvim" },
         keys = {
-            { "<leader>gs", mode = { "n" }, function() vim.cmd [[Git]] end,         desc = "[Git] status" },
-            { "<leader>gd", mode = { "n" }, function() vim.cmd [[Gdiffsplit]] end,  desc = "[Git] diff" },
-            { "<leader>gb", mode = { "n" }, function() vim.cmd [[Git blame]] end,   desc = "[Git] blame" },
-            { "<leader>gc", mode = { "n" }, function() vim.cmd [[Git commit]] end,  desc = "[Git] commit" },
-            { "<leader>gm", mode = { "n" }, function() vim.cmd [[Gdiffsplit!]] end, desc = "[Git] merge (3-way)" },
+            { "<leader>gs", mode = { "n" }, function() vim.cmd [[Git]] end,           desc = "[Git] status" },
+            { "<leader>gd", mode = { "n" }, function() vim.cmd [[Gvdiffsplit]] end,   desc = "[Git] diff" },
+            { "<leader>gm", mode = { "n" }, function() vim.cmd [[Gvdiffsplit!]] end,  desc = "[Git] merge (3-way)" },
+            { "<leader>gb", mode = { "n" }, function() vim.cmd [[Git checkout ]] end, desc = "[Git] blame" },
+            { "<leader>gB", mode = { "n" }, function() vim.cmd [[Git branch ]] end,   desc = "[Git] blame" },
+            { "<leader>gc", mode = { "n" }, function() vim.cmd [[Git commit]] end,    desc = "[Git] commit" },
+            { "<leader>gS", mode = { "n" }, function() vim.cmd [[Git add %]] end,     desc = "[Git] status" },
         },
         init = function()
-            vim.api.nvim_create_autocmd("User", {
-                pattern = "FugitiveIndex",
-                callback = function()
-                    vim.keymap.set("n", "gh", ":diffget //2<CR>", { buffer = true })
-                    vim.keymap.set("n", "gl", ":diffget //3<CR>", { buffer = true })
-                end,
-            })
+            vim.api.nvim_create_user_command("Mergetool", function()
+                local conflicts = vim.fn.systemlist('git diff --name-only --diff-filter=U')
+
+                if #conflicts == 0 then
+                    print("No conflicts found")
+                    return
+                end
+
+                local initial_buf = vim.api.nvim_get_current_buf()
+                local initial_buf_name = vim.api.nvim_buf_get_name(initial_buf)
+
+                for _, file in ipairs(conflicts) do
+                    vim.cmd('tabedit ' .. file)
+                    vim.cmd('Gvdiffsplit!')
+
+                    local wins = vim.api.nvim_tabpage_list_wins(0)
+                    vim.api.nvim_set_current_win(wins[2])
+                    vim.cmd('wincmd J')
+
+                    -- Keymaps and stuff
+                    local buffers = {}
+                    for _, win in ipairs(wins) do
+                        table.insert(buffers, vim.api.nvim_win_get_buf(win))
+                    end
+
+                    local working_buf = buffers[2]
+
+                    vim.keymap.set('n', 'gh', function()
+                        vim.cmd('diffget ' .. buffers[1])
+                    end, { buffer = working_buf })
+
+                    vim.keymap.set('n', 'gl', function()
+                        vim.cmd('diffget ' .. buffers[3])
+                    end, { buffer = working_buf })
+                end
+
+                -- Close the initial buffer only if it's unnamed and empty
+                if initial_buf_name == '' and vim.api.nvim_buf_get_option(initial_buf, 'modified') == false then
+                    vim.api.nvim_buf_delete(initial_buf, { force = true })
+                end
+            end, { desc = "Run when need to solve merge conflicts" })
         end,
     },
     {

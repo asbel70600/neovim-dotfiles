@@ -105,16 +105,15 @@ return {
         dependencies = {
             "L3MON4D3/LuaSnip",
             "rafamadriz/friendly-snippets",
+            "ribru17/blink-cmp-spell",
+            "Exafunction/windsurf.nvim",
             -- { "milanglacier/minuet-ai.nvim" },
-            { "ribru17/blink-cmp-spell" },
-            { "Exafunction/windsurf.nvim" },
             -- { "Kaiser-Yang/blink-cmp-git" },
             -- { "bydlw98/blink-cmp-env" },
         },
         build = "cargo build --release",
         version = "1.*",
-        event = "InsertEnter",
-
+        event = { "InsertEnter", "CmdLineEnter" },
         ---@module 'blink.cmp'
         ---@type blink.cmp.Config
         opts = {

@@ -1,6 +1,6 @@
 return {
     "neovim/nvim-lspconfig",
-    event = { "BufReadPre", "BufNewFile" },
+    event = { "User ProjectOpened" },
     dependencies = {
         "nvim-tree/nvim-web-devicons",
         "williamboman/mason.nvim",

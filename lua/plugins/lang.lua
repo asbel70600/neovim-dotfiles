@@ -1,7 +1,7 @@
 return {
     {
         "RaafatTurki/hex.nvim",
-        event = { "BufReadPost *.bin,*.hex,*.o,*.out,*.elf,*.img,[^.]*" },
+        event = "BufReadPost *.bin,*.hex,*.o,*.out,*.elf,*.img,[^.]*",
     },
     {
         "elkowar/yuck.vim",

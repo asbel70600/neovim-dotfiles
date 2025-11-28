@@ -55,6 +55,8 @@ return {
         },
         init = function()
             vim.api.nvim_create_user_command("Mergetool", function()
+                require("lazy").load({ plugins = { "vim-fugitive" } })
+
                 local conflicts = vim.fn.systemlist('git diff --name-only --diff-filter=U')
 
                 if #conflicts == 0 then

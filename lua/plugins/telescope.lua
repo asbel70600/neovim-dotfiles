@@ -2,26 +2,9 @@ return {
     {
         "nvim-telescope/telescope.nvim",
         keys = {
-            {
-                "<leader>fd",
-                function()
-                    require("telescope").extensions.zoxide.list({
-                        border = false,
-                        layout_config = {
-                            height = 25,
-                        },
-                        layout_strategy = "bottom_pane",
-                        sorting_strategy = "ascending",
-                        theme = "ivy",
-                    })
-                end,
-            },
-            {
-                "<leader>fo",
-                function()
-                    require("telescope.builtin").oldfiles()
-                end,
-            },
+            { "<leader>fd", function() require("telescope").extensions.zoxide.list() end, desc = "[Telescope] open zoxide list" },
+            { "<leader>fo", require("telescope.builtin").oldfiles,                        desc = "[Telescope] open oldfiles" },
+            { "<leader>ff", require("telescope.builtin").find_files,                      desc = "[Telescope] open oldfiles" },
         },
 
         dependencies = {

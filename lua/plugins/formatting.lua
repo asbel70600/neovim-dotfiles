@@ -18,7 +18,7 @@ return {
                 -- php = { "tlint" },
                 php = { "phpcbf" },
 
-                lua = { lsp_format = "prefer" },
+                lua = { lsp_format = "fallback" },
                 python = { "black" },
                 java = { "google-java-format" },
 

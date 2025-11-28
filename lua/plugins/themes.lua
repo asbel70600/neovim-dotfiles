@@ -1,23 +1,38 @@
 return {
     {
-        "Shatur/neovim-ayu",
-    },
-    {
-        "folke/tokyonight.nvim",
-    },
-    {
-        "rebelot/kanagawa.nvim",
-    },
-    {
-        "rose-pine/neovim",
-    },
-    {
-        "EdenEast/nightfox.nvim",
-    },
-    {
-        "projekt0n/github-nvim-theme",
+        "thesimonho/kanagawa-paper.nvim",
+        lazy = true,
     },
     {
         "yorik1984/newpaper.nvim",
+        lazy = true,
+        opts = { style = "dark" },
+    },
+    {
+        "neanias/everforest-nvim",
+        lazy = true,
+        version = false,
+        opts = {
+            background = "soft",
+            italics = true,
+        },
+        config = function() end,
+    },
+    {
+        "rebelot/kanagawa.nvim",
+        lazy = true,
+        opts = {
+            comile = true,
+            theme = "dragon",
+            commentStyle = { italic = true },
+            functionStyle = {},
+            keywordStyle = { italic = true },
+            statementStyle = {},
+            typeStyle = { bold = true },
+            background = {
+                dark = "dragon",
+                light = "lotus",
+            },
+        },
     },
 }

@@ -1,1 +1,55 @@
-/home/asbel/.xdg/config/nvim/lua/plugins/rust/filetype.lua
+-- local function add_keymaps(_, bufnr)
+--     -- vim.keymap.set("n", "<leader>a", function()
+--     --     vim.cmd.RustLsp("codeAction")
+--     -- end, { silent = true, buffer = bufnr })
+--     --
+--     -- vim.keymap.set({ "n", "v" }, "J", function()
+--     --     vim.cmd.RustLsp("joinLines")
+--     -- end, { silent = true, buffer = bufnr })
+--     --
+--     -- vim.keymap.set("n", "K", function()
+--     --     vim.cmd.RustLsp({ "hover", "actions" })
+--     -- end, { silent = true, buffer = bufnr })
+--     --
+--     -- vim.keymap.set("v", "K", function()
+--     --     vim.cmd.RustLsp({ "hover", "range" })
+--     -- end, { silent = true, buffer = bufnr })
+--     --
+--     -- vim.keymap.set("n", "]d", function()
+--     --     vim.cmd.RustLsp({ "renderDiagnostic", "cycle" })
+--     -- end, { silent = true, buffer = bufnr })
+--     --
+--     -- vim.keymap.set("n", "[d", function()
+--     --     vim.cmd.RustLsp({ "renderDiagnostic", "cycle_prev" })
+--     -- end, { silent = true, buffer = bufnr })
+--     --
+--     -- vim.keymap.set("n", "<f5>", function()
+--     --     vim.cmd.RustLsp("debuggables")
+--     -- end, { silent = true, buffer = bufnr })
+--     --
+--     -- vim.keymap.set("n", "<f1>", function()
+--     --     vim.cmd.RustLsp({ "explainError", "cycle" })
+--     -- end, { silent = true, buffer = bufnr })
+--     --
+--     -- vim.keymap.set("n", "<f2>", function()
+--     --     vim.cmd.RustLsp("syntaxTree")
+--     -- end, { silent = true, buffer = bufnr })
+--     --
+--     -- vim.keymap.set("n", "<f4>", function()
+--     --     vim.cmd.RustLsp({ "view", "hir" })
+--     -- end, { silent = true, buffer = bufnr })
+--     --
+--     -- vim.keymap.set("n", "<f3>", function()
+--     --     vim.cmd.RustLsp({ "view", "mir" })
+--     -- end, { silent = true, buffer = bufnr })
+--     vim.notify("buffer: " .. bufnr .. " realone: " .. vim.api.nvim_get_current_buf())
+-- end
+--
+-- vim.g.rustaceanvim = {
+--     server = {
+--         on_attach = add_keymaps,
+--         default_settings = {
+--             ["rust-analyzer"] = {},
+--         },
+--     },
+-- }

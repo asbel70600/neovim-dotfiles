@@ -1,87 +1,94 @@
 return {
     {
-        lazy = true,
-        "rcarriga/nvim-dap-ui",
-        dependencies = { "nvim-neotest/nvim-nio" },
-    },
-    {
-        lazy = true,
         "mfussenegger/nvim-dap",
+        lazy = true,
+        dependencies = {
+            "nvim-neotest/nvim-nio",
+            "theHamsta/nvim-dap-virtual-text",
+            "igorlfs/nvim-dap-view",
+        },
         keys = {
             {
-                "<F5>",
-                function()
-                    require("dap").continue()
-                end,
-                mode = "n",
-            },
-            {
-                "<F10>",
-                function()
-                    require("dap").step_over()
-                end,
-                mode = "n",
-            },
-            {
-                "<F11>",
-                function()
-                    require("dap").step_into()
-                end,
-                mode = "n",
-            },
-            {
-                "<F12>",
-                function()
-                    require("dap").step_out()
-                end,
-                mode = "n",
-            },
-            {
-                "<Leader>db",
+                "<leader>db",
                 function()
                     require("dap").toggle_breakpoint()
                 end,
-                mode = "n",
             },
+
             {
-                "<Leader>dm",
+                "<leader>dc",
                 function()
-                    require("dap").set_breakpoint()
+                    require("dap").continue()
                 end,
-                mode = "n",
-            },
-            {
-                "<Leader>dh",
-                function()
-                    require("dap.ui.widgets").hover()
-                end,
-                mode = { "n", "v" },
-            },
-            {
-                "<Leader>dp",
-                function()
-                    require("dap.ui.widgets").preview()
-                end,
-                mode = { "n", "v" },
+                desc = "Continue",
             },
         },
         config = function()
-            local dap, dapui = require("dap"), require("dapui")
-            dapui.setup()
-            dap.listeners.before.attach.dapui_config = function()
-                dapui.open()
+            local dap, dv = require("dap"), require("dap-view")
+
+            local adapters = {
+                php_dbg = {
+                    type = "executable",
+                    command = "/home/asbel/.xdg/local/share/nvim/mason/bin/php-debug-adapter",
+                },
+                codelldb = {
+                    type = "executable",
+                    command = "/usr/bin/lldb-dap",
+                    args = { "-p", "9000" },
+                },
+            }
+
+            local configurations = {
+                php = {
+                    {
+                        type = "php",
+                        request = "launch",
+                        name = "Basic Debug",
+                        port = 9003,
+                    },
+                    {
+                        type = "php",
+                        request = "launch",
+                        name = "Debug Laravel",
+                        program = "${workspaceFolder}/artisan",
+                        args = { "serve" },
+                        port = 9003,
+                    },
+                },
+                rust = {
+                    {
+                        type = "rust_debugger",
+                        request = "launch",
+                        name = "Basic Debug",
+                        port = 9003,
+                        program = "cargo",
+                        args = { "run" },
+                    },
+                },
+            }
+
+            -- dap.listeners.before.attach["dap-view-config"] = function()
+            --     dv.open()
+            -- end
+            -- dap.listeners.before.launch["dap-view-config"] = function()
+            --     dv.open()
+            -- end
+            -- dap.listeners.before.event_terminated["dap-view-config"] = function()
+            --     dv.close()
+            -- end
+            -- dap.listeners.before.event_exited["dap-view-config"] = function()
+            --     dv.close()
+            -- end
+
+            for name, adapter in ipairs(adapters) do
+                dap.adapters[name] = adapter
             end
-            dap.listeners.before.launch.dapui_config = function()
-                dapui.open()
+
+            for lang, config in ipairs(configurations) do
+                dap.configurations[lang] = config
             end
-            dap.listeners.before.event_terminated.dapui_config = function()
-                dapui.close()
-            end
-            dap.listeners.before.event_exited.dapui_config = function()
-                dapui.close()
-            end
+
+            require("plugins.mappings.dap")
         end,
     },
 }
-
--- vim: foldlevel=3

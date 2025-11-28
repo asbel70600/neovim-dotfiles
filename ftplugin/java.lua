@@ -1,0 +1,44 @@
+-- local project_name = vim.fn.fnamemodify(vim.fn.getcwd(), ":p:h:t")
+-- local workspace_dir = "/home/asbel/.xdg/local/state/jdtls/" .. project_name
+--
+-- local java_home = "/usr/lib/jvm/java-21-openjdk"
+-- local java_command = java_home .. "/bin/java"
+-- local jdtls_home = "/home/asbel/apps/jdtls"
+-- local jdtls_launcher = jdtls_home .. "/plugins/org.eclipse.equinox.launcher_1.6.400.v20210924-0641.jar"
+-- local jdtls_config = jdtls_home .. "/config_linux"
+--
+-- local config = {
+--     cmd = {
+--         java_command,
+--         "-Declipse.application=org.eclipse.jdt.ls.core.id1",
+--         "-Dosgi.bundles.defaultStartLevel=4",
+--         "-Declipse.product=org.eclipse.jdt.ls.core.product",
+--         "-Dlog.protocol=true",
+--         "-Dlog.level=ALL",
+--         "-Xmx1g",
+--         "--add-modules=ALL-SYSTEM",
+--         "--add-opens",
+--         "java.base/java.util=ALL-UNNAMED",
+--         "--add-opens",
+--         "java.base/java.lang=ALL-UNNAMED",
+--         "-jar",
+--         jdtls_launcher,
+--         "-configuration",
+--         jdtls_config,
+--         "-data",
+--         workspace_dir,
+--     },
+--
+--     root_dir = vim.fs.root(0, { ".git", "mvnw", "gradlew" }),
+--
+--     -- https://github.com/eclipse/eclipse.jdt.ls/wiki/Running-the-JAVA-LS-server-from-the-command-line#initialize-request
+--     settings = {
+--         java = {},
+--     },
+--
+--     -- https://github.com/mfussenegger/nvim-jdtls#java-debug-installation
+--     init_options = {
+--         bundles = {},
+--     },
+-- }
+-- require("jdtls").start_or_attach(config)

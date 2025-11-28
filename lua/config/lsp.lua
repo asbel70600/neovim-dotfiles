@@ -1,129 +1,37 @@
-local opts = {
-    noremap = true, -- non-recursive
-    silent = true,  -- do not show message
-}
+vim.api.nvim_create_autocmd({ "LspAttach" }, {
+    pattern = "*",
+    callback = function()
+        vim.keymap.set({ "n", "v" }, "<S-K>", vim.lsp.buf.hover, { desc = "Show [K]hover info" })
+        vim.keymap.set({ "n", "v" }, "<leader>a", vim.lsp.buf.code_action, { desc = "code [a]ctions" })
+        vim.keymap.set("n", "gR", vim.lsp.buf.rename, { desc = "[R]ename symbol" })
+        vim.keymap.set("n", "<leader>h", vim.lsp.buf.document_highlight, { desc = "[h]ighlight ocurences" })
+        vim.keymap.set("n", "<leader>H", vim.lsp.buf.clear_references, { desc = "clear [H]ighlight" })
+        vim.keymap.set("n", "]d", function()
+            vim.diagnostic.jump({ count = 1, float = true })
+        end, { desc = "hover information" })
+        vim.keymap.set("n", "[d", function()
+            vim.diagnostic.jump({ count = -1, float = true })
+        end, { desc = "hover information" })
+        vim.keymap.set("n", "<leader>i", function()
+            vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled({ 0 }), { 0 })
+        end)
+        vim.keymap.set("n", "<leader>d", function()
+            local status = not vim.diagnostic.config().virtual_lines
+            vim.diagnostic.config({ virtual_lines = status })
+            vim.diagnostic.config({ virtual_text = not status })
+        end)
 
-local function previousDiagnostics()
-    vim.diagnostic.goto_prev({
-        severity = {
-            min = vim.diagnostic.severity.INFO,
-        },
-    })
-end
-
-local function nextDiagnostics()
-    vim.diagnostic.goto_next({
-        severity = {
-            min = vim.diagnostic.severity.INFO,
-        },
-    })
-end
-
-local function listWorkspaceFolders()
-    print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
-end
-
-vim.api.nvim_create_autocmd("LspAttach", {
-    callback = function(args)
-        -- vim.keymap.set("n", "<Leader>ld", "<cmd>Lspsaga finder def<CR>", { desc = "definition" })
-        vim.keymap.set("n", "<Leader>lr", "<cmd>Lspsaga finder ref<CR>", { desc = "references" })
-
-        vim.keymap.set("n", "<Leader>lD", "<cmd>Lspsaga<CR>", { desc = "declaration" })
-        vim.keymap.set("n", "<Leader>ld", "<cmd>Lspsaga goto_definition<CR>", { desc = "definition" })
-        vim.keymap.set("n", "<Leader>lt", "<cmd>Lspsaga goto_type_definition<CR>", { desc = "type definition" })
-
-        vim.keymap.set("n", "<Leader>lpD", "<cmd>Lspsaga<CR>", { desc = "declaration" })
-        vim.keymap.set("n", "<Leader>lpd", "<cmd>Lspsaga peek_definition<CR>", { desc = "definition" })
-        vim.keymap.set("n", "<Leader>lpt", "<cmd>Lspsaga peek_type_definition<CR>", { desc = "type definition" })
-
-        vim.keymap.set("n", "<Leader>lci", "<cmd>Lspsaga incoming_calls<CR>", { desc = "incoming calls" })
-        vim.keymap.set("n", "<Leader>lco", "<cmd>Lspsaga outgoing_calls<CR>", { desc = "outgoing calls" })
-
-        vim.keymap.set("n", "<Leader>la", "<cmd>Lspsaga code_action<CR>", { desc = "code actions" })
-        vim.keymap.set("v", "<Leader>la", "<cmd>Lspsaga code_action<CR>", { desc = "code actions" })
-
-        vim.keymap.set("n", "<Leader>li", "<cmd>Lspsaga finder imp<CR>", { desc = "implementations" })
-        vim.keymap.set("n", "<Leader>lo", "<cmd>Lspsaga outline<CR>", { desc = "implementations" })
-
-        vim.keymap.set("n", "<Leader>lsw", vim.lsp.buf.workspace_symbol, { desc = "workspace symbol" })
-        vim.keymap.set("n", "<Leader>lsd", vim.lsp.buf.document_symbol, { desc = "document symbol" })
-
-        vim.keymap.set("n", "<C-Space>", vim.lsp.buf.completion, { desc = "completion" })
-        vim.keymap.set("n", "<Leader>lf", vim.lsp.buf.format, { desc = "Format" })
-        vim.keymap.set("n", "<Leader>lR", "<cmd>Lspsaga rename<CR>", { desc = "Rename symbol" })
-
-        vim.keymap.set("n", "<Leader>lh", vim.lsp.buf.document_highlight, { desc = "Highlight references" })
-        vim.keymap.set("n", "<Leader>lH", vim.lsp.buf.clear_references, { desc = "Clear highlight" })
-
-        vim.keymap.set("n", "<A-H>", vim.lsp.buf.signature_help, { desc = "signature help" })
-        vim.keymap.set("v", "<A-H>", vim.lsp.buf.signature_help, { desc = "signature help" })
-        vim.keymap.set("n", "<A-h>", "<cmd>Lspsaga hover_doc<CR>", { desc = "hover information" })
-        vim.keymap.set("v", "<A-h>", "<cmd>Lspsaga hover_doc<CR>", { desc = "hover information" })
-        vim.keymap.set("n", "<A-t>", "<cmd>Lspsaga term_toggle<CR>", { desc = "Toggle terminal" })
-        vim.keymap.set("t", "<A-t>", "<cmd>Lspsaga term_toggle<CR>", { desc = "Toggle terminal" })
-
-        vim.keymap.set("n", "[d", "<cmd>Lspsaga diagnostic_jump_prev<CR>", { desc = "hover information" })
-        vim.keymap.set("n", "]d", "<cmd>Lspsaga diagnostic_jump_next<CR>", { desc = "hover information" })
-
+        -- Telesope deppendent keymaps, they all are in:
+        -- $XDG_CONFIG_HOME/nvim/lua/plugins/mappings/telescope.lua:60
+        if not TELESCOPE_PLUGGED then
+            vim.keymap.set("n", "gd", vim.lsp.buf.definition, { desc = "go to [d]efinition" })
+            vim.keymap.set("n", "gr", vim.lsp.buf.references, { desc = "show [r]eferences" })
+            vim.keymap.set("n", "Q", vim.lsp.buf.document_symbol, { desc = "search document symbols" })
+        else
+            vim.keymap.set("n", "gd", require("telescope.builtin").lsp_definitions, { desc = "list [d]efinitions" })
+            vim.keymap.set("n", "gr", require("telescope.builtin").lsp_references, { desc = "list [r]eferences" })
+            vim.keymap.set("n", "Q", require("telescope.builtin").lsp_document_symbols, { desc = "find [Q]symbols" })
+        end
         vim.opt.omnifunc = "v:lua.vim.lsp.omnifunc"
     end,
 })
-
--- Unused
--- vim.lsp.buf.execute_command()
-
--- vim.lsp.buf.completion()
--- vim.lsp.buf.code_action()
--- vim.lsp.buf.execute_command()
--- vim.lsp.buf.rename()
--- vim.lsp.buf.format()
--- vim.lsp.buf.hover()
-
--- vim.lsp.buf.add_workspace_folder()
--- vim.lsp.buf.workspace_symbol()
--- vim.lsp.buf.list_workspace_folders()
--- vim.lsp.buf.remove_workspace_folder()
-
--- vim.lsp.buf.clear_references()
-
--- vim.lsp.buf.type_definition()
--- vim.lsp.buf.definition()
--- vim.lsp.buf.declaration()
--- vim.lsp.buf.implementation()
--- vim.lsp.buf.references()
--- vim.lsp.buf.signature_help()
---
--- vim.lsp.buf.document_highlight()
--- vim.lsp.buf.document_symbol()
---
--- vim.lsp.buf.incoming_calls()
--- vim.lsp.buf.outgoing_calls()
---
--- vim.lsp.buf.server_ready()
---
--- callHierarchy/incomingCalls
--- callHierarchy/outgoingCalls
--- textDocument/codeAction
--- textDocument/completion
--- textDocument/definition
--- textDocument/documentHighlight
--- textDocument/documentSymbol
--- textDocument/formatting
--- textDocument/hover
--- textDocument/publishDiagnostics
--- textDocument/rangeFormatting
--- textDocument/references
--- textDocument/rename
--- textDocument/signatureHelp
-
--- window/logMessage
--- window/showMessage
--- window/showDocument
--- window/showMessageRequest
-
--- workspace/applyEdit
--- workspace/symbol
-
--- textDocument/typeDefinition*
--- textDocument/implementation*
--- textDocument/declaration*

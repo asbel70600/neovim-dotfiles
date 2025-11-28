@@ -1,0 +1,11 @@
+{
+    "name": "Custom Snippets",
+    "contributes": {
+        "snippets": [
+            {
+                "language": "rust",
+                "path": "./rust.json"
+            }
+        ]
+    }
+}

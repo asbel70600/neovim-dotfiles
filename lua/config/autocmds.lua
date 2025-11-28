@@ -1,96 +1,26 @@
 vim.api.nvim_create_autocmd("TermEnter", { command = [[set timeoutlen=100]] })
 vim.api.nvim_create_autocmd("TermLeave", { command = [[set timeoutlen=800]] })
+
 vim.api.nvim_create_autocmd("CmdlineEnter", { command = [[set hlsearch]] })
 vim.api.nvim_create_autocmd("CmdlineLeave", { command = [[set nohlsearch]] })
-vim.api.nvim_create_autocmd(
-    { "BufRead", "BufNewFile" },
-    { pattern = { "*config/hypr/*.conf" }, command = [[set makeprg=hyprctl\ reload]] }
-)
 
-vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
-    pattern = { "*.slint" },
-    command = [[set ft=slint]],
-})
-
-vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
-    command = [[set nowrap]]
-})
-
-vim.api.nvim_create_autocmd("BufEnter", {
+vim.api.nvim_create_autocmd("TextYankPost", {
+    desc = "highlight when yanking text",
     callback = function()
-        local currentb = vim.fn.bufname()
-        if string.len(currentb) == 0 then
-            vim.opt.hidden = false
-        else
-            vim.opt.hidden = true
-        end
+        vim.highlight.on_yank()
     end,
 })
 
-vim.api.nvim_create_autocmd("BufEnter", {
-    callback = function(ev)
-        local name = string.match(ev.file, "term:///")
-        if name then
-            vim.cmd("normal i")
-        end
-    end,
-})
-
-
-vim.api.nvim_create_autocmd({'BufEnter', 'BufWinEnter'}, {
-		pattern = {"*.hl", "hypr*.conf"},
-		callback = function(event)
-				print(string.format("starting hyprls for %s", vim.inspect(event)))
-				vim.lsp.start {
-						name = "hyprlang",
-						cmd = {"hyprls"},
-						root_dir = vim.fn.getcwd(),
-				}
-		end
-})
-
--- vim.api.nvim_create_autocmd("BufEnter", {
---    nested = true,
+-- vim.api.nvim_create_autocmd("UIEnter", {
 --     callback = function()
---         if #vim.api.nvim_list_wins() == 1 and require("nvim-tree.utils").is_nvim_tree_buf() then
---             vim.cmd("e dummie")
---         end
+--         require("telescope").extensions.zoxide.list({
+--             border = false,
+--             layout_config = {
+--                 height = 25,
+--             },
+--             layout_strategy = "bottom_pane",
+--             sorting_strategy = "ascending",
+--             theme = "ivy",
+--         })
 --     end,
--- })
-
--- vim.api.nvim_create_autocmd("BufEnter", {
---     callback = function(ev)
---         print(vim.inspect(ev))
---         -- local name = string.match(ev.file,"__Mundo_")
---
---         -- if name then
---         --     local buffer = ev.buf
---         --     vim.bo[buffer].guifont = "Hack:h12"
---         --     print("this is mundo in buffer " .. ev.buf)
---         -- else
---         --     print("this isn't mundo")
---         -- end
---     end,
--- })
-
--- vim.api.nvim_create_autocmd("WinEnter",{
---     callback = function (ev)
--- --        print(vim.inspect(ev))
---         local name = string.match(ev.file,"__Mundo_")
---
---         if name then
---             local buffer = ev.buf
---             vim.bo[buffer].guifont = "Hack:h12"
---             print("this is mundo in buffer " .. ev.buf)
---         else
---             print("this isn't mundo")
---         end
---     end
--- })
-
--- vim.api.nvim_create_autocmd("BufWritePre", {
--- 	pattern = "*",
--- 	callback = function(args)
--- 		require("conform").format({ bufnr = args.buf })
--- 	end,
 -- })

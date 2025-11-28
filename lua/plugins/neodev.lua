@@ -1,29 +1,27 @@
 return {
-    lazy = true,
-    "folke/neodev.nvim",
-    dependencies = {
-        "hrsh7th/nvim-cmp",
-    },
+    "folke/lazydev.nvim",
+    ft = "lua",
     opts = {
         library = {
-            enabled = true,
-            runtime = true,
-            types = true,
-            plugins = {
-                "nvim-dap-ui",
-                types = true,
-            },
+            -- always load the LazyVim library
+            "LazyVim",
+
+            -- Library paths can be absolute
+            -- "~/projects/my-awesome-lib",
+            -- Or relative, which means they will be resolved from the plugin dir.
+            -- "lazy.nvim",
+            -- It can also be a table with trigger words / mods
+            -- Only load luvit types when the `vim.uv` word is found
+            { path = "${3rd}/luv/library", words = { "vim%.uv" } },
+            -- Only load the lazyvim library when the `LazyVim` global is found
+            { path = "LazyVim", words = { "LazyVim" } },
+            -- Load the wezterm types when the `wezterm` module is required
+            -- Needs `justinsgithub/wezterm-types` to be installed
+            -- { path = "wezterm-types", mods = { "wezterm" } },
+            -- Load the xmake types when opening file named `xmake.lua`
+            -- Needs `LelouchHe/xmake-luals-addon` to be installed
+            -- { path = "xmake-luals-addon/library", files = { "xmake.lua" } },
+            { path = "${3rd}/luv/library", words = { "vim%.uv" } },
         },
-        setup_jsonls = true,
-        lspconfig = true,
-        pathStrict = true,
-        -- to add a new directory where neodev will run
-        --         override = function(root_dir, library)
-        --             if root_dir:find("directory_to_run_neodev", 1, true) == 1 then
-        --                 library.enabled = true
-        --                 library.plugins = true
-        --             end
-        --         end,
     },
-    enabled = true,
 }

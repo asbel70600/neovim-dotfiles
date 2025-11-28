@@ -1,1 +1,0 @@
-/home/asbel/.xdg/config/nvim/lua/plugins/haskell/filetype.lua

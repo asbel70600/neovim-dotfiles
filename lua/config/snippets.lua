@@ -26,6 +26,7 @@ local snippets = {
 }
 function source_custom_snipptets()
     local ls = require("luasnip")
+
     local s = ls.snippet
     local t = ls.text_node
     local i = ls.insert_node
@@ -35,12 +36,13 @@ function source_custom_snipptets()
 
     ls.add_snippets("lua", {
         s("plugin", fmt(snippets.plugin, { i(2), i(1, "true") })),
-        s("pluginfull",
-            fmt(snippets.pluginfull,{
+        s(
+            "pluginfull",
+            fmt(snippets.pluginfull, {
                 i(4),
-                c(3,{
-                    sn(3,fmt(snippets.pluginfull_function,i(1))),
-                    sn(3,fmt(snippets.pluginfull_opts,i(1)))
+                c(3, {
+                    sn(3, fmt(snippets.pluginfull_function, i(1))),
+                    sn(3, fmt(snippets.pluginfull_opts, i(1))),
                 }),
                 i(2),
                 i(1, "true"),

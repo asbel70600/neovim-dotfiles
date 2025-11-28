@@ -1,65 +1,75 @@
-vim.opt.encoding = "utf8"
-vim.opt.fileformat = "unix"
+-- misc
+vim.o.encoding = "utf8"
+vim.o.fileformat = "unix"
 vim.opt.completeopt = { "menu", "menuone", "noselect" }
-vim.opt.clipboard = "unnamedplus"
-
 vim.o.timeout = true
 vim.o.timeoutlen = 800
+vim.o.inccommand = "nosplit"
+vim.o.hidden = true
+vim.o.list = true
+vim.o.matchtime = 1
+vim.o.showmatch = true
+vim.o.spelllang = "en_us"
+vim.o.spell = false
 
--- :h 'shada'
-vim.opt.shada = "!,%,<10000,'500,/50,:100,s100000,r/tmp,r/mnt,r/media,r/efi,r/opt,r/doc,r/home/asbel/apps/nvim/share/nvim,r/home/asbel/.xdg/local/share/nvim,r/usr/share/,n/home/asbel/.xdg/shada"
+vim.opt.exrc = false
+vim.opt.secure = false
 
--- Questions
-vim.opt.inccommand = "split"
--- vim.opt.hidden = true
-vim.opt.ttyfast = true
-vim.opt.list = true
-vim.opt.matchtime = 1
+vim.opt.shada = "!,%,<30,'30,/50,:30,s10,r/tmp,r/mnt,r/media,r/efi,r/opt,r/doc,r/usr/share/,n/home/asbel/.xdg/shada"
+vim.opt.shadafile = "/home/asbel/.xdg/shada"
 
--- Visual
-vim.opt.scrolloff = 3
-vim.opt.sidescrolloff = 5
-vim.opt.number = true
-vim.opt.relativenumber = true
-vim.opt.cmdheight = 1
-vim.opt.syntax = "on"
-vim.opt.filetype = "on"
-vim.opt.termguicolors = true
-vim.opt.showmode = true
-vim.opt.laststatus = 3
-vim.opt.listchars = "tab:<->,trail:."
-vim.opt.wrapmargin = 2
+vim.schedule(function()
+    vim.o.clipboard = "unnamedplus"
+end)
+
+-- -- Visual
+vim.o.scrolloff = 10
+vim.o.sidescrolloff = 10
+vim.o.number = true
+vim.o.relativenumber = true
+vim.o.cmdheight = 1
+vim.o.termguicolors = true
+vim.o.showmode = false
+vim.o.listchars = "tab:<->,trail:."
+vim.opt.listchars = { tab = "» ", trail = "·", nbsp = "␣" }
+vim.o.wrapmargin = 2
+vim.o.signcolumn = "number"
+vim.o.numberwidth = 1
+vim.o.laststatus = 0
+-- vim.o.cmdheight = 0
 
 -- Behavior
-vim.opt.splitbelow = true
-vim.opt.splitright = true
-vim.opt.wrap = true
-vim.opt.magic = true
-vim.opt.belloff = "all"
-vim.opt.undofile = true
-vim.opt.undodir = "/home/asbel/.xdg/local/share/nvim/undo"
+vim.o.splitright = true
+vim.o.splitbelow = true
+vim.o.wrap = true
+vim.o.magic = true
+vim.o.belloff = "all"
+vim.o.undofile = true
+vim.o.undodir = "/home/asbel/.xdg/local/share/nvim/undo"
+vim.o.confirm = true
 
 -- Wildmenu
-vim.opt.wildmenu = true
-vim.opt.wildmode = "lastused:list,full:list"
-vim.opt.wildignore = "*.docx,*.jpg,*.png,*.gif,*.pdf,*.pyc,*.exe,*.flv,*.img,*.xlsx"
+vim.o.wildmenu = true
+vim.o.wildmode = "lastused:list,full:list"
+vim.o.wildignore = "*.docx,*.jpg,*.png,*.gif,*.pdf,*.pyc,*.exe,*.flv,*.img,*.xlsx"
 
 -- Tabs
 vim.opt.autoindent = true
 vim.opt.expandtab = true
 vim.opt.tabstop = 4
 vim.opt.shiftwidth = 4
+vim.opt.breakindent = true
 
 -- Misc
 vim.opt.title = true
 vim.opt.path = "**"
 vim.opt.background = "dark"
 vim.opt.history = 100
-
+--
 -- Backup
 vim.opt.backup = true
 vim.opt.writebackup = true
-vim.opt.backupdir = "/tmp"
+vim.opt.backupdir = "/home/asbel/.local/state/nvim/backup"
 vim.opt.backspace = "indent,eol,start"
 
 -- Searching
@@ -68,22 +78,13 @@ vim.opt.incsearch = true
 vim.opt.ignorecase = true
 vim.opt.smartcase = true
 
--- Folding with treesitter
-vim.opt.foldcolumn = "1"
-vim.opt.foldlevel = 1
-vim.opt.foldlevelstart = 99
-vim.opt.foldenable = true
-vim.opt.foldmethod = "expr"
-vim.opt.foldexpr = "v:lua.vim.treesitter.foldexpr()"
-vim.opt.foldtext = "v:lua.MyFoldText()"
-
 -- Neovide
 if vim.g.neovide then
-    vim.opt.guifont = "MonaspiceXe Nerd Font:h18:#e-subpixelantialias:#h-none"
+    vim.opt.guifont = "Monaspace Xenon:h18:#e-subpixelantialias:#h-none"
     vim.g.neovide_confirm_quit = true
     vim.g.neovide_fullscreen = true
     vim.g.neovide_cursor_animate_command_line = false
-    vim.g.neovide_theme = "dark"
+    vim.g.neovide_theme = "auto"
     vim.g.neovide_refresh_rate = 60
     vim.g.neovide_refresh_rate_idle = 1
     vim.g.neovide_no_idle = false
@@ -95,10 +96,6 @@ if vim.g.neovide then
     -- vim.g.neovide_cursor_trail_size = 1.8
 end
 
-vim.g.netrw_preview = 1
-vim.g.netrw_liststyle = 3
-vim.g.netrw_winsize = 30
-
 vim.filetype.add({
     pattern = {
         [".*%.blade%.php"] = "blade",
@@ -106,44 +103,28 @@ vim.filetype.add({
 })
 
 vim.filetype.add({
-  pattern = { [".*/hypr/.*%.conf"] = "hyprlang" },
+    pattern = { [".*/hypr/.*%.conf"] = "hyprlang" },
 })
 
--- try
---     set undofile
--- catch
--- endtry
--- set timeout
--- set timeoutlen=150
--- set ttimeoutlen=0
--- let g:tagbar_phpctags_memory_limit = '512M'
--- let g:airline_theme='ayu_mirage'
--- set termguicolors
--- let ayucolor="dark"
--- colorscheme ayu
--- vim.opt.omnifunc = "syntaxcomplete#Complete"
---echo nvim_treesitter#statusline(90)  " 90 can be any length
---module->expression_statement->call->identifier
---  autochdir
---  autowrite
---  autowriteall
---  set spell
--- set undofile
--- vim.opt.go+='!'
--- " TERMINAL
--- set t_vb=
--- set tm=500
--- set t_Co=256
--- set clipboard=unnamedplus
--- set clipboard+=unnamed
--- vim.opt.wildchar = "<Tab>"
--- vim.opt.nohlsearch = true
--- vim.opt.noshowmatch = true
--- vim.opt.filetype_indent = true
--- vim.opt.syntax = true
--- vim.opt.fixdel = true
--- vim.opt.nocompatible = true
--- vim.opt.novisualbell = true
--- vim.opt.noerrorbells = true
--- let &t_ut=''
--- vim.opt.lazyredraw = true
+vim.opt.foldmethod = "manual" -- Set fast default
+vim.api.nvim_create_autocmd("BufReadPost", {
+    callback = function()
+        -- Folding
+        function MyFoldText()
+            local linestart = vim.fn.getline(vim.v.foldstart)
+            local linend = vim.fn.getline(vim.v.foldend)
+            linend = string.match(linend, "^%s*(.*)")
+
+            local finalline = linestart .. " ... " .. linend
+            local triling = string.rep(" ", vim.fn.winwidth(0) - string.len(finalline))
+            return finalline .. triling
+        end
+        vim.opt.foldcolumn = "0"
+        vim.opt.foldlevel = 1
+        vim.opt.foldlevelstart = 99
+        vim.opt.foldenable = true
+        vim.opt.foldmethod = "expr"
+        vim.opt.foldtext = "v:lua.MyFoldText()"
+        vim.o.foldexpr = "v:lua.vim.lsp.foldexpr()" -- vim.opt.foldexpr = "v:lua.vim.treesitter.foldexpr()"
+    end,
+})

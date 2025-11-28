@@ -1,8 +1,5 @@
 return {
     "MeanderingProgrammer/render-markdown.nvim",
-    ft = {
-        "markdown",
-    },
     ---@module 'render-markdown'
     ---@type render.md.UserConfig
     opts = {
@@ -19,9 +16,11 @@ return {
             border_virtual = true,
         },
         indent = { enabled = true },
-        latex = { enabled = false },
+        latex = { enabled = true },
         sign = { enabled = false },
     },
     dependencies = { "nvim-treesitter/nvim-treesitter", "nvim-tree/nvim-web-devicons" }, -- if you prefer nvim-web-devicons
-    enabled = false,
+    ft = {
+        "markdown",
+    },
 }

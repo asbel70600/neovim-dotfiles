@@ -1,7 +1,6 @@
 return {
     "mfussenegger/nvim-lint",
     ft = {
-        "java",
         "markdown",
         "gitcommit",
         "c",
@@ -9,7 +8,6 @@ return {
         "php",
         "blade",
         "dockerfile",
-        "python",
         "bash",
         "html",
         "zsh",
@@ -30,28 +28,26 @@ return {
         --     env = nil, -- custom environment table to use with the external process. Note that this replaces the *entire* environment, it is not additive.
         --     parser = your_parse_function,
         -- }
+        --
 
         require("lint").linters_by_ft = {
             java = { "checkstyle", "trivy" },
-            -- rust = { "lsp" },
             markdown = { "vale" },
             c = { "cpplint", "cppcheck" },
             cpp = { "cpplint", "cppcheck" },
-            php = { "phpstan", "tlint", "php", "phpcs", "phpmd" },
             blade = { "tlint" },
             dockerfile = { "hadolint" },
             python = { "flake8" },
-            bash = { "ShellCheck" },
             html = { "htmlhint" },
-            zsh = { "zsh", "ShellCheck" },
-            json = { "biomejs" },
-            javascript = { "biomejs" },
-            javascriptreact = { "biomejs" },
-            typescript = { "biomejs" },
+            zsh = { "zsh" },
+            json = { "eslint_d" },
+            javascript = { "eslint_d" },
+            javascriptreact = { "eslint_d" },
+            typescript = { "eslint_d" },
             gitcommit = { "commitlint" },
         }
 
-        vim.api.nvim_create_autocmd("BufWrite", {
+        vim.api.nvim_create_autocmd("BufWritePost", {
             desc = "Try linting the written file",
             callback = function()
                 require("lint").try_lint()

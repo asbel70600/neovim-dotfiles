@@ -1,4 +1,3 @@
-TELESCOPE_PLUGGED = false
 vim.g.loaded_perl_provider = 0
 vim.g.loaded_python3_provider = 0
 vim.g.loaded_ruby_provider = 0
@@ -11,6 +10,8 @@ vim.g.have_nerd_font = true
 vim.g.netrw_preview = 1
 vim.g.netrw_liststyle = 3
 vim.g.netrw_winsize = 30
+
+vim.g.lsp_attached_once = false
 
 require("config.options")
 require("config.autocmds")

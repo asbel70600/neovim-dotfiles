@@ -1,4 +1,6 @@
 return {
+    { "stevearc/dressing.nvim", event = "LspAttach" },
+    { "j-hui/fidget.nvim",      event = { "LspAttach", "BufReadPre" }, opts = {} },
     {
         "windwp/nvim-autopairs",
         event = "InsertEnter",
@@ -100,25 +102,62 @@ return {
         end,
     },
     {
-        "jedrzejboczar/exrc.nvim",
+        'kevinhwang91/nvim-ufo',
+        dependencies = { 'kevinhwang91/promise-async' },
         config = function()
-            require("exrc").setup({
-                exrc_name = ".nvim.lua",
-                on_vim_enter = true,
-                on_dir_changed = {
-                    enabled = true,
-                    use_ui_select = false,
+            local ftMap = {
+                vim = 'indent',
+                python = { 'indent' },
+                git = ''
+            }
+            require('ufo').setup({
+                open_fold_hl_timeout = 150,
+
+                close_fold_kinds_for_ft = {
+                    default = { 'imports', 'comment' },
+                    json = { 'array' },
+                    c = { 'comment', 'region' },
                 },
-                trust_on_write = true,
-                use_telescope = true,
-                min_log_level = vim.log.levels.DEBUG,
-                lsp = {
-                    auto_setup = false,
+
+                close_fold_current_line_for_ft = {
+                    default = true,
+                    c = false
                 },
-                commands = {
-                    instant_edit_single = true,
+
+                preview = {
+                    win_config = {
+                        border = { '', '─', '', '', '', '─', '', '' },
+                        winhighlight = 'Normal:Folded',
+                        winblend = 0
+                    },
+                    mappings = {
+                        scrollU = '<C-u>',
+                        scrollD = '<C-d>',
+                        jumpTop = '[',
+                        jumpBot = ']'
+                    }
                 },
+                provider_selector = function(bufnr, filetype, buftype)
+                    -- if you prefer treesitter provider rather than lsp,
+                    -- return ftMap[filetype] or {'treesitter', 'indent'}
+                    return ftMap[filetype]
+
+                    -- refer to ./doc/example.lua for detail
+                end
             })
-        end,
+
+            vim.keymap.set('n', 'zR', require('ufo').openFoldsExceptKinds)
+            vim.keymap.set('n', 'zM', require('ufo').closeAllFolds)
+            vim.o.foldlevel = 99
+
+            vim.keymap.set('n', 'q', function()
+                local winid = require('ufo').peekFoldedLinesUnderCursor()
+                if not winid then
+                    -- choose one of coc.nvim and nvim lsp
+                    vim.fn.CocActionAsync('definitionHover') -- coc.nvim
+                    vim.lsp.buf.hover()
+                end
+            end)
+        end
     },
 }

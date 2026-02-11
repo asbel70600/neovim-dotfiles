@@ -135,20 +135,18 @@ return {
                 ["<C-d>"] = { "scroll_documentation_down" },
                 ["<C-u>"] = { "scroll_documentation_up" },
                 ["<C-Space>"] = { "show_and_insert", "show_documentation", "hide_documentation" },
-                ["<C-p>"] = {
-                    function(cpm)
-                        return
-                    end,
-                    "select_prev",
-                    "fallback",
-                },
-                ["<C-n>"] = {
-                    function(cmp)
-                        return
-                    end,
-                    "select_next",
-                    "fallback",
-                },
+                ["<C-p>"] = { "select_prev", "fallback", },
+                ["<C-n>"] = { "select_next", "fallback", },
+                -- ["<C-y>"] = {
+                --     function(cmp)
+                --         cmp.accept()
+                --     end,
+                --     function(cmp)
+                --         local coor = vim.api.nvim_win_get_cursor(0)
+                --         vim.print(coor);
+                --         vim.api.nvim_win_set_cursor(0, { 1, 1 })
+                --     end
+                -- }
                 -- ["<A-y>"] = require("minuet").make_blink_map(),
             },
 
@@ -162,7 +160,11 @@ return {
                     show_on_backspace_after_accept = true,
                 },
 
-                accept = { dot_repeat = false, resolve_timeout_ms = 10000 },
+                accept = {
+                    dot_repeat = true,
+                    resolve_timeout_ms = 10000,
+                    auto_brackets = { blocked_filetypes = { "kotlin" } }
+                },
                 menu = { draw = { treesitter = { "lsp" } }, border = "single" },
                 documentation = {
                     window = { border = "single" },
@@ -171,12 +173,12 @@ return {
                     treesitter_highlighting = true,
                 },
 
-                ghost_text = { enabled = false },
+                ghost_text = { enabled = true },
             },
 
             signature = {
                 enabled = true,
-                trigger = { show_on_keyword = true },
+                trigger = { show_on_keyword = true, show_on_accept = true, show_on_insert = true },
                 window = { show_documentation = true, border = "single" },
             },
 

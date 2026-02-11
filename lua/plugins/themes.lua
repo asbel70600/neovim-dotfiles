@@ -6,7 +6,6 @@ return {
     {
         "yorik1984/newpaper.nvim",
         lazy = true,
-        opts = { style = "dark" },
     },
     {
         "neanias/everforest-nvim",

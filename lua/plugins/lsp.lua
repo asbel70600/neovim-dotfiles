@@ -1,6 +1,25 @@
 return {
     "neovim/nvim-lspconfig",
     event = { "User ProjectOpened" },
+    ft = {
+        -- Shell scripts
+        "sh", "bash", "zsh", "fish",
+        -- Config files
+        "conf", "config", "cfg", "ini", "toml", "yaml", "yml", "json", "proto", "graphql",
+        -- System/dotfiles
+        "dosini", "systemd", "crontab",
+        -- Window manager configs
+        "hypr", "i3config", "swayconfig",
+        -- Low-level
+        "asm", "nasm",
+        -- Scripts
+        "python", "lua", "perl", "ruby", "awk", "sed",
+        -- Text/markup (optional, if you edit these standalone)
+        "markdown", "text", "rst",
+        -- Other common standalone files
+        "dockerfile", "make", "cmake", "sql"
+    },
+
     dependencies = {
         "nvim-tree/nvim-web-devicons",
         "williamboman/mason.nvim",
@@ -9,28 +28,20 @@ return {
     },
 
     config = function()
-        local lspconfig = require("lspconfig")
         local capabilities = require("blink.cmp").get_lsp_capabilities()
 
         local servers = {
-            wgsl_analyzer = {},
-            -- glaswog = {},
             dockerls = {},
-            biome = {},
-            asm_lsp = {},
+            protols = {},
             clangd = {},
-            html = {},
-            hyprls = {},
             lua_ls = {},
             markdown_oxide = {},
-            pyright = {},
-            quick_lint_js = {},
-            sqls = {},
+            jsonls = {},
+            graphql = {},
             taplo = {},
             ts_ls = {},
             phpactor = {},
-            prismals = {},
-            tailwindcss = {},
+            rust_analyzer = {},
             bashls = {
                 filetypes = { "sh", "bash", "zsh" },
             },
@@ -41,9 +52,6 @@ return {
                     },
                 },
             },
-            -- java_language_server = { cmd = { "java-language-server" } },
-            -- intelephense = {},
-            -- stimulus_ls = {}
         }
 
         for name, conf in pairs(servers) do
@@ -81,5 +89,3 @@ return {
         })
     end,
 }
-
--- vim: foldlevel=2

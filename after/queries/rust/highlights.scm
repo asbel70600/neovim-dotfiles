@@ -2,7 +2,6 @@
 
 ; Operators & Punctuation
 "=>" @keyword.debug
-
 "..=" @punctuation.delimiter
 
 ; Bitwise

@@ -12,7 +12,8 @@ vim.o.showmatch = true
 vim.o.spelllang = "en_us"
 vim.o.spell = false
 
-vim.opt.exrc = false
+-- Exrc
+vim.o.exrc = true
 vim.opt.secure = false
 
 vim.opt.shada = "!,%,<30,'30,/50,:30,s10,r/tmp,r/mnt,r/media,r/efi,r/opt,r/doc,r/usr/share/,n/home/asbel/.xdg/shada"
@@ -106,25 +107,26 @@ vim.filetype.add({
     pattern = { [".*/hypr/.*%.conf"] = "hyprlang" },
 })
 
-vim.opt.foldmethod = "manual" -- Set fast default
-vim.api.nvim_create_autocmd("BufReadPost", {
-    callback = function()
-        -- Folding
-        function MyFoldText()
-            local linestart = vim.fn.getline(vim.v.foldstart)
-            local linend = vim.fn.getline(vim.v.foldend)
-            linend = string.match(linend, "^%s*(.*)")
-
-            local finalline = linestart .. " ... " .. linend
-            local triling = string.rep(" ", vim.fn.winwidth(0) - string.len(finalline))
-            return finalline .. triling
-        end
-        vim.opt.foldcolumn = "0"
-        vim.opt.foldlevel = 1
-        vim.opt.foldlevelstart = 99
-        vim.opt.foldenable = true
-        vim.opt.foldmethod = "expr"
-        vim.opt.foldtext = "v:lua.MyFoldText()"
-        vim.o.foldexpr = "v:lua.vim.lsp.foldexpr()" -- vim.opt.foldexpr = "v:lua.vim.treesitter.foldexpr()"
-    end,
-})
+-- vim.opt.foldmethod = "manual" -- Set fast default
+-- vim.api.nvim_create_autocmd("BufReadPost", {
+--     callback = function()
+--         -- Folding
+--         function MyFoldText()
+--             local linestart = vim.fn.getline(vim.v.foldstart)
+--             local linend = vim.fn.getline(vim.v.foldend)
+--             linend = string.match(linend, "^%s*(.*)")
+--
+--             local finalline = linestart .. " ... " .. linend
+--             local triling = string.rep(" ", vim.fn.winwidth(0) - string.len(finalline))
+--             return finalline .. triling
+--         end
+--
+--         vim.opt.foldcolumn = "0"
+--         vim.opt.foldlevel = 1
+--         vim.opt.foldlevelstart = 99
+--         vim.opt.foldenable = true
+--         vim.opt.foldmethod = "expr"
+--         vim.opt.foldtext = "v:lua.MyFoldText()"
+--         vim.o.foldexpr = "v:lua.vim.lsp.foldexpr()" -- vim.opt.foldexpr = "v:lua.vim.treesitter.foldexpr()"
+--     end,
+-- })

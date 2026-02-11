@@ -1,4 +1,5 @@
 return {
+    enabled = true,
     "stevearc/conform.nvim",
     event = { "BufWritePre" },
     config = function()
@@ -7,28 +8,34 @@ return {
                 lsp_format = "fallback",
             },
             formatters_by_ft = {
-                -- rust = { "rustfmt", lsp_format = "fallback" },
+                -- Demon
+                html = { "prettierd" },
+                css = { "prettierd" },
+                javascript = { "prettierd" },
+                javascriptreact = { "prettierd" },
+                typescript = { "prettierd" },
+                json = { "prettierd" },
+                jsonc = { "prettierd" },
 
-                javascript = { "biome" },
-                javascriptreact = { "biome" },
+                -- Laravel / php
+                -- php = { "tlint", "phpcbf" },
+
+                -- Config
                 yaml = { lsp_format = "first" },
-                html = { "prettier" },
-                css = { "biome" },
-                blade = { "blade-formatter" },
-                -- php = { "tlint" },
-                php = { "phpcbf" },
-
+                toml = { lsp_format = "first" },
                 lua = { lsp_format = "fallback" },
+
                 python = { "black" },
                 java = { "google-java-format" },
 
-                asm = { "asmfmt" },
-                wasm = { "asmfmt" },
-                vasm = { "asmfmt" },
-                nasm = { "asmfmt" },
-                fasm = { "asmfmt" },
-                tiasm = { "asmfmt" },
-                vmasm = { "asmfmt" },
+                -- Assebly
+                -- asm = { "asmfmt" },
+                -- wasm = { "asmfmt" },
+                -- vasm = { "asmfmt" },
+                -- nasm = { "asmfmt" },
+                -- fasm = { "asmfmt" },
+                -- tiasm = { "asmfmt" },
+                -- vmasm = { "asmfmt" },
             },
             lsp_format = "first",
         })

@@ -8,13 +8,12 @@ return {
             disable_filetype = { "TelescopePrompt", "vim" },
         },
     },
-    {
-        "folke/flash.nvim",
-        keys = {
-            { "<C-s>", mode = { "n", "x", "o" }, function() require("flash").jump() end,       desc = "[Flash] jump" },
-            { "\\",    mode = { "n", "x", "o" }, function() require("flash").treesitter() end, desc = "[Flash] node selection" },
-        },
-    },
+    -- {
+    --     "folke/flash.nvim",
+    --     keys = {
+    --         { "<C-s>", mode = { "n", "x", "o" }, function() require("flash").jump() end,       desc = "[Flash] jump" },
+    --     },
+    -- },
     {
         "folke/todo-comments.nvim",
         event = { "LspAttach" },
@@ -47,13 +46,13 @@ return {
         "tpope/vim-fugitive",
         dependencies = { "stevearc/dressing.nvim" },
         keys = {
-            { "<leader>gs", mode = { "n" }, function() vim.cmd [[Git]] end,           desc = "[Git] status" },
-            { "<leader>gd", mode = { "n" }, function() vim.cmd [[Gvdiffsplit]] end,   desc = "[Git] diff" },
-            { "<leader>gm", mode = { "n" }, function() vim.cmd [[Gvdiffsplit!]] end,  desc = "[Git] merge (3-way)" },
-            { "<leader>gb", mode = { "n" }, function() vim.cmd [[Git checkout ]] end, desc = "[Git] blame" },
-            { "<leader>gB", mode = { "n" }, function() vim.cmd [[Git branch ]] end,   desc = "[Git] blame" },
-            { "<leader>gc", mode = { "n" }, function() vim.cmd [[Git commit]] end,    desc = "[Git] commit" },
-            { "<leader>gS", mode = { "n" }, function() vim.cmd [[Git add %]] end,     desc = "[Git] status" },
+            { "<leader>gs", mode = { "n" }, function() vim.cmd [[Git]] end,          desc = "[Git] status" },
+            { "<leader>gd", mode = { "n" }, function() vim.cmd [[Gvdiffsplit]] end,  desc = "[Git] diff" },
+            { "<leader>gm", mode = { "n" }, function() vim.cmd [[Gvdiffsplit!]] end, desc = "[Git] merge (3-way)" },
+            { "<leader>gB", mode = { "n" }, function() vim.cmd [[Git blame ]] end,   desc = "[Git] blame" },
+            { "<leader>gb", mode = { "n" }, function() vim.cmd [[Git branch ]] end,  desc = "[Git] branch" },
+            { "<leader>gc", mode = { "n" }, function() vim.cmd [[Git commit]] end,   desc = "[Git] commit" },
+            { "<leader>ga", mode = { "n" }, function() vim.cmd [[Git add %]] end,    desc = "[Git] add %" },
         },
         init = function()
             vim.api.nvim_create_user_command("Mergetool", function()
@@ -101,63 +100,61 @@ return {
             end, { desc = "Run when need to solve merge conflicts" })
         end,
     },
-    {
-        'kevinhwang91/nvim-ufo',
-        dependencies = { 'kevinhwang91/promise-async' },
-        config = function()
-            local ftMap = {
-                vim = 'indent',
-                python = { 'indent' },
-                git = ''
-            }
-            require('ufo').setup({
-                open_fold_hl_timeout = 150,
-
-                close_fold_kinds_for_ft = {
-                    default = { 'imports', 'comment' },
-                    json = { 'array' },
-                    c = { 'comment', 'region' },
-                },
-
-                close_fold_current_line_for_ft = {
-                    default = true,
-                    c = false
-                },
-
-                preview = {
-                    win_config = {
-                        border = { '', '─', '', '', '', '─', '', '' },
-                        winhighlight = 'Normal:Folded',
-                        winblend = 0
-                    },
-                    mappings = {
-                        scrollU = '<C-u>',
-                        scrollD = '<C-d>',
-                        jumpTop = '[',
-                        jumpBot = ']'
-                    }
-                },
-                provider_selector = function(bufnr, filetype, buftype)
-                    -- if you prefer treesitter provider rather than lsp,
-                    -- return ftMap[filetype] or {'treesitter', 'indent'}
-                    return ftMap[filetype]
-
-                    -- refer to ./doc/example.lua for detail
-                end
-            })
-
-            vim.keymap.set('n', 'zR', require('ufo').openFoldsExceptKinds)
-            vim.keymap.set('n', 'zM', require('ufo').closeAllFolds)
-            vim.o.foldlevel = 99
-
-            vim.keymap.set('n', 'q', function()
-                local winid = require('ufo').peekFoldedLinesUnderCursor()
-                if not winid then
-                    -- choose one of coc.nvim and nvim lsp
-                    vim.fn.CocActionAsync('definitionHover') -- coc.nvim
-                    vim.lsp.buf.hover()
-                end
-            end)
-        end
-    },
+    -- {
+    --     'kevinhwang91/nvim-ufo',
+    --     dependencies = { 'kevinhwang91/promise-async' },
+    --     config = function()
+    --         local ftMap = {
+    --             vim = 'indent',
+    --             python = { 'indent' },
+    --             git = ''
+    --         }
+    --         require('ufo').setup({
+    --             open_fold_hl_timeout = 150,
+    --
+    --             close_fold_kinds_for_ft = {
+    --                 default = { 'imports', 'comment' },
+    --                 json = { 'array' },
+    --                 c = { 'comment', 'region' },
+    --             },
+    --
+    --             close_fold_current_line_for_ft = {
+    --                 default = true,
+    --                 c = false
+    --             },
+    --
+    --             preview = {
+    --                 win_config = {
+    --                     border = { '', '─', '', '', '', '─', '', '' },
+    --                     winhighlight = 'Normal:Folded',
+    --                     winblend = 0
+    --                 },
+    --                 mappings = {
+    --                     scrollU = '<C-u>',
+    --                     scrollD = '<C-d>',
+    --                     jumpTop = '[',
+    --                     jumpBot = ']'
+    --                 }
+    --             },
+    --             provider_selector = function(bufnr, filetype, buftype)
+    --                 return ftMap[filetype]
+    --
+    --                 -- refer to ./doc/example.lua for detail
+    --             end
+    --         })
+    --
+    --         vim.keymap.set('n', 'zR', require('ufo').openFoldsExceptKinds)
+    --         vim.keymap.set('n', 'zM', require('ufo').closeAllFolds)
+    --         vim.o.foldlevel = 99
+    --
+    --         vim.keymap.set('n', 'q', function()
+    --             local winid = require('ufo').peekFoldedLinesUnderCursor()
+    --             if not winid then
+    --                 -- choose one of coc.nvim and nvim lsp
+    --                 vim.fn.CocActionAsync('definitionHover') -- coc.nvim
+    --                 vim.lsp.buf.hover()
+    --             end
+    --         end)
+    --     end
+    -- },
 }

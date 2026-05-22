@@ -53,7 +53,7 @@ vim.api.nvim_create_user_command("ColorschemeLightRandom", function()
     end)
 end, {})
 
-local ___current___ = dark_themes
+local ___current___ = light_themes
 
 vim.api.nvim_create_autocmd("UIEnter", {
     desc = "Setting a Random Colorscheme",

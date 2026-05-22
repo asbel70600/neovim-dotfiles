@@ -29,7 +29,7 @@ require("lazy").setup({
         rtp = {
             disabled_plugins = {
                 -- "matchit",
-                "man",
+                -- "man",
                 "net",
                 "matchparen",
                 "gzip",
@@ -45,6 +45,7 @@ require("lazy").setup({
             },
         },
     },
+    git = { timeout = 1200 },
     checker = { enabled = false },
     change_detection = { enabled = false },
 })

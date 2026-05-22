@@ -11,6 +11,9 @@ vim.o.matchtime = 1
 vim.o.showmatch = true
 vim.o.spelllang = "en_us"
 vim.o.spell = false
+vim.opt.foldmethod = "expr"
+vim.opt.foldexpr = "v:lua.vim.treesitter.foldexpr()"
+vim.opt.foldenable = false
 
 -- Exrc
 vim.o.exrc = true
@@ -83,13 +86,12 @@ vim.opt.smartcase = true
 if vim.g.neovide then
     vim.opt.guifont = "Monaspace Xenon:h18:#e-subpixelantialias:#h-none"
     vim.g.neovide_confirm_quit = true
-    vim.g.neovide_fullscreen = true
+    vim.g.neovide_fullscreen = false
     vim.g.neovide_cursor_animate_command_line = false
     vim.g.neovide_theme = "auto"
     vim.g.neovide_refresh_rate = 60
     vim.g.neovide_refresh_rate_idle = 1
     vim.g.neovide_no_idle = false
-    vim.g.neovide_fullscreen = true
     vim.g.neovide_profiler = false
     vim.g.neovide_scale_factor = 1.0
     vim.g.neovide_text_gamma = 0.8
@@ -127,6 +129,5 @@ vim.filetype.add({
 --         vim.opt.foldenable = true
 --         vim.opt.foldmethod = "expr"
 --         vim.opt.foldtext = "v:lua.MyFoldText()"
---         vim.o.foldexpr = "v:lua.vim.lsp.foldexpr()" -- vim.opt.foldexpr = "v:lua.vim.treesitter.foldexpr()"
 --     end,
 -- })

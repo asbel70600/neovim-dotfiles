@@ -1,6 +1,6 @@
 --
 -- Misc
-vim.keymap.set("n", "<C-S-r>", ":so ~/.config/nvim/after/plugin/theme.lua<CR>", { desc = "[Theme] reload theme" })
+vim.keymap.set("n", "<C-S-r>", ":so ~/.config/nvim/lua/config/theme.lua<CR>", { desc = "[Theme] reload theme" })
 vim.keymap.set("n", "$", "g_", { desc = "goto first char in line" })
 vim.keymap.set("n", "0", "^", { desc = "goto last char in line" })
 vim.keymap.set("n", "g_", "$", { desc = "goto end of line" })
@@ -76,20 +76,15 @@ vim.keymap.set("n", "<C-BS>", function()
     -- vim.api.nvim_buf_delete(old, {})
 end, { desc = "[Buffers] Delete buffer" })
 
--- Terminal
 vim.keymap.set("n", "<A-t>", function()
-    vim.system({
-        "alacritty",
-        "msg",
-        "create-window",
-        "--working-directory",
-        vim.fn.getcwd(0)
-    }, { detach = true }, function() end)
-end, { desc = "[Terminal] open terminal in non floating window" })
-
-vim.keymap.set("n", "<A-j>", function()
     vim.system(
-        { "hyprctl", "dispatch exec [float] alacritty --working-directory " .. vim.fn.getcwd(0) },
+        {
+            "alacritty",
+            "msg",
+            "create-window",
+            "--working-directory",
+            vim.fn.getcwd(0)
+        },
         { detach = true },
         function() end
     )

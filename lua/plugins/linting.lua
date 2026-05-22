@@ -37,7 +37,7 @@ return {
             cpp = { "cpplint", "cppcheck" },
             blade = { "tlint" },
             dockerfile = { "hadolint" },
-            python = { "flake8" },
+            python = { "ruff" },
             html = { "htmlhint" },
             zsh = { "zsh" },
             json = { "eslint_d" },

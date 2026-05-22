@@ -11,6 +11,7 @@ return {
             { "<Leader>fg", function() require("telescope.builtin").live_grep() end,                 desc = "[Telescope] live grep" },
             { "<Leader>fa", function() require("telescope.builtin").current_buffer_fuzzy_find() end, desc = "[Telescope] fuzzy find" },
             { "<Leader>fh", function() require("telescope.builtin").help_tags() end,                 desc = "[Telescope] help" },
+            { "<Leader>c",  function() require("telescope.builtin").git_status() end,                desc = "[Telescope] git status" },
             {
                 "<leader><leader>",
                 function()

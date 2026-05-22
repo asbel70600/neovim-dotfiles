@@ -1,128 +1,83 @@
 return {
-    {
-        "nvim-treesitter/nvim-treesitter",
-        config = function()
-            require("nvim-treesitter.configs").setup({
-                ensure_installed = { "c", "lua", "vim", "vimdoc", "query" },
-                modules = {},
-                sync_install = false,
-                auto_install = false,
-                ignore_install = {},
-                indent = {
-                    enable = true,
-                },
+    "nvim-treesitter/nvim-treesitter-textobjects",
+    branch = "main",
+    event = "BufReadPost",
+    config = function()
+        require("nvim-treesitter-textobjects").setup({
+            select = { lookahead = true },
+            move = { set_jumps = true },
+        })
 
-                highlight = {
-                    enable = true,
-                    disable = function(_, buf)
-                        local max_filesize = 1024 * 1024
-                        local ok, stats = pcall(vim.loop.fs_stat, vim.api.nvim_buf_get_name(buf))
-                        if ok and stats and stats.size > max_filesize then
-                            return true
-                        end
-                    end,
-                    additional_vim_regex_highlighting = false,
-                },
+        local select = require("nvim-treesitter-textobjects.select")
+        local move = require("nvim-treesitter-textobjects.move")
+        local so = { "x", "o" }
+        local nxo = { "n", "x", "o" }
 
-                incremental_selection = {
-                    enable = true,
-                    keymaps = {
-                        init_selection = "<Leader>ss",
-                        node_incremental = "<Leader>si",
-                        node_decremental = "<Leader>sd",
-                        scope_incremental = false,
-                    },
-                },
+        -- Select textobjects
+        local sel = {
+            { "af", "@function.outer" },
+            { "if", "@function.inner" },
+            { "ai", "@conditional.outer" },
+            { "ii", "@conditional.inner" },
+            { "al", "@loop.outer" },
+            { "il", "@loop.inner" },
+            { "ap", "@parameter.outer" },
+            { "ip", "@parameter.inner" },
+            { "ia", "@assignment.outer" },
+            { "]",  "@assignment.lhs" },
+            { "[",  "@assignment.rhs" },
+            { "ir", "@return.inner" },
+            { "ar", "@return.outer" },
+            { "ib", "@block.inner" },
+            { "ab", "@block.outer" },
+            { "i/", "@comment.inner" },
+            { "a/", "@comment.outer" },
+            { "ic", "@call.inner" },
+            { "ac", "@call.outer" },
+            { "is", "@statement.outer" },
+        }
+        for _, v in ipairs(sel) do
+            vim.keymap.set(so, v[1], function()
+                select.select_textobject(v[2], "textobjects")
+            end)
+        end
 
-                textobjects = {
-                    select = {
-                        lookahead = true,
-                        enable = true,
-                        keymaps = {
-                            -- ask gpt for exercises to master this keymaps
-                            ["af"] = "@function.outer",
-                            ["if"] = "@function.inner",
+        -- Move: next start
+        local next_start = {
+            { "]f", "@function.outer",    "Next function start" },
+            { "]p", "@parameter.outer",   "Next parameter" },
+            { "]a", "@assignment.lhs",    "Next assignment" },
+            { "]i", "@conditional.outer", "Next if" },
+            { "]l", "@loop.outer",        "Next loop" },
+            { "]b", "@block.outer",       "Next block" },
+            { "]c", "@call.outer",        "Next call" },
+            { "]/", "@comment.outer",     "Next comment" },
+            { "]s", "@statement.outer",   "Next statement" },
+            { "]r", "@return.outer",      "Next return" },
+        }
+        for _, v in ipairs(next_start) do
+            vim.keymap.set(nxo, v[1], function()
+                move.goto_next_start(v[2])
+            end, { desc = v[3] })
+        end
 
-                            ["ai"] = "@conditional.outer",
-                            ["ii"] = "@conditional.inner",
-
-                            ["al"] = "@loop.outer",
-                            ["il"] = "@loop.inner",
-
-                            ["ap"] = "@parameter.outer",
-                            ["ip"] = "@parameter.inner",
-
-                            ["ia"] = "@assignment.outer",
-                            -- ["ia"] = "@assignment.inner",
-
-                            ["]"] = "@assignment.lhs",
-                            ["["] = "@assignment.rhs",
-
-                            ["ir"] = "@return.inner",
-                            ["ar"] = "@return.outer",
-
-                            ["ib"] = "@block.inner",
-                            ["ab"] = "@block.outer",
-
-                            ["i/"] = "@comment.inner",
-                            ["a/"] = "@comment.outer",
-
-                            ["ic"] = "@call.inner",
-                            ["ac"] = "@call.outer",
-
-                            ["is"] = "@statement.outer",
-                        },
-                    },
-                    move = {
-                        enable = true,
-                        set_jumps = true,
-                        goto_next_start = {
-                            ["]f"] = { query = "@function.outer", desc = "Next Function Start" },
-                            ["]p"] = { query = "@parameter.outer", desc = "Next parameter" },
-                            ["]a"] = { query = "@assignment.lhs", desc = "Next assignment" },
-                            ["]i"] = { query = "@conditional.outer", desc = "Next if" },
-                            ["]l"] = { query = "@loop.outer", desc = "Next loop" },
-                            ["]b"] = { query = "@block.outer", desc = "Next block" },
-                            -- ["]c"] = { query = "@call.outer", desc = "Next call" },
-                            ["]/"] = { query = "@comment.outer", desc = "Next comment" },
-                            ["]s"] = { query = "@statement.outer", desc = "Next statement" },
-                            ["]r"] = { query = "@return.outer", desc = "Next return" },
-                        },
-                        goto_previous_start = {
-                            ["[f"] = { query = "@function.outer", desc = "Previous function" },
-                            ["[p"] = { query = "@parameter.outer", desc = "Previous parameter" },
-                            ["[a"] = { query = "@assignment.lhs", desc = "Previous assignment" },
-                            ["[i"] = { query = "@conditional.outer", desc = "Previous if" },
-                            ["[l"] = { query = "@loop.outer", desc = "Previous loop" },
-                            ["[b"] = { query = "@block.outer", desc = "Next block" },
-                            -- ["[c"] = { query = "@call.outer", desc = "Next call" },
-                            ["[/"] = { query = "@comment.outer", desc = "Next comment" },
-                            ["[s"] = { query = "@statement.outer", desc = "Next statement" },
-                            ["[r"] = { query = "@return.outer", desc = "Next return" },
-                        },
-                    },
-                },
-            })
-
-            local parser_config = require("nvim-treesitter.parsers").get_parser_configs()
-            parser_config.blade = {
-                install_info = {
-                    url = "https://github.com/EmranMR/tree-sitter-blade",
-                    files = { "src/parser.c" },
-                    branch = "main",
-                },
-                filetype = "blade",
-            }
-        end,
-        branch = "master",
-        build = ":TSUpdate",
-        event = { "BufReadPost", "BufNewFile" },
-        dependencies = {
-            { "nvim-treesitter/nvim-treesitter-textobjects" },
-        },
-    },
-    {
-        "nvim-treesitter/nvim-treesitter-textobjects",
-        lazy = true,
-    },
+        -- Move: previous start
+        local prev_start = {
+            { "[f", "@function.outer",    "Previous function" },
+            { "[p", "@parameter.outer",   "Previous parameter" },
+            { "[a", "@assignment.lhs",    "Previous assignment" },
+            { "[i", "@conditional.outer", "Previous if" },
+            { "[l", "@loop.outer",        "Previous loop" },
+            { "[b", "@block.outer",       "Previous block" },
+            { "[c", "@call.outer",        "Previous call" },
+            { "[/", "@comment.outer",     "Previous comment" },
+            { "[s", "@statement.outer",   "Previous statement" },
+            { "[r", "@return.outer",      "Previous return" },
+        }
+        for _, v in ipairs(prev_start) do
+            vim.keymap.set(nxo, v[1], function()
+                move.goto_previous_start(v[2])
+            end, { desc = v[3] })
+        end
+    end,
 }

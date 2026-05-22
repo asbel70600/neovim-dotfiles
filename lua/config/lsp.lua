@@ -32,11 +32,11 @@ vim.api.nvim_create_autocmd('LspAttach', {
         end)
 
         vim.keymap.set({ "n", "v" }, "gd", require("telescope.builtin").lsp_definitions, { desc = "list [d]efinitions" })
+        vim.keymap.set({ "n", "v" }, "gD", require("telescope.builtin").lsp_type_definitions,
+            { desc = "find Type Definition" })
         vim.keymap.set({ "n", "v" }, "gi", require("telescope.builtin").lsp_implementations,
             { desc = "list [d]efinitions" })
         vim.keymap.set({ "n", "v" }, "gr", require("telescope.builtin").lsp_references, { desc = "list [r]eferences" })
-        vim.keymap.set({ "n", "v" }, "gtd", require("telescope.builtin").lsp_type_definitions,
-            { desc = "find Type Definition" })
         vim.keymap.set({ "n", "v" }, "<leader>fs", require("telescope.builtin").lsp_document_symbols,
             { desc = "find [Q]symbols" })
         vim.keymap.set({ "n", "v" }, "<leader>fw", require("telescope.builtin").lsp_workspace_symbols,

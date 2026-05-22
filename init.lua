@@ -13,6 +13,11 @@ vim.g.netrw_winsize = 30
 
 vim.g.lsp_attached_once = false
 
+vim.g.markdown_fenced_languages = vim.list_extend(
+  vim.g.markdown_fenced_languages or {},
+  { "ts=typescript" }
+)
+
 require("config.options")
 require("config.autocmds")
 require("config.lazy")

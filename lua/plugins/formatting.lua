@@ -25,7 +25,7 @@ return {
                 toml = { lsp_format = "first" },
                 lua = { lsp_format = "fallback" },
 
-                python = { "black" },
+                python = { "ruff" },
                 java = { "google-java-format" },
 
                 -- Assebly
@@ -169,7 +169,6 @@ return {
 -- `hurlfmt` - Formats hurl files.
 -- `imba_fmt` - Code formatter for the Imba programming language.
 -- `indent` - GNU Indent.
--- `injected` - Format treesitter injected languages.
 -- `inko` - A language for building concurrent software with confidence
 -- `isort` - Python utility / library to sort imports alphabetically and
 --         automatically separate them into sections and by type.

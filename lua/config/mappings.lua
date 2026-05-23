@@ -142,6 +142,51 @@ local function rust_keymaps(_, bufnr)
     end, { silent = true, buffer = bufnr, desc = "[Rust] view MIR" })
 end
 
+local function keymap_picker()
+    local pickers = require("telescope.pickers")
+    local finders = require("telescope.finders")
+    local conf = require("telescope.config").values
+
+    local modes = { "n", "v", "x", "i", "c", "t", "o" }
+    local entries = {}
+    local seen = {}
+
+    for _, mode in ipairs(modes) do
+        for _, km in ipairs(vim.api.nvim_get_keymap(mode)) do
+            local lhs = km.lhs or ""
+            local desc = km.desc or ""
+            if lhs:match("^<Plug>") or desc == "" then goto continue end
+            local key = mode .. lhs
+            if seen[key] then goto continue end
+            seen[key] = true
+            local group = desc:match("^%[([^%]]+)%]") or "Other"
+            local clean_desc = desc:gsub("^%[[^%]]+%]%s*", "")
+            local display_lhs = lhs:gsub("^ ", "󱁐 ")
+            table.insert(entries, {
+                display = string.format("%-16s %-22s (%s)  %s", "[" .. group .. "]", display_lhs, mode, clean_desc),
+                ordinal = string.format("[%s] %s %s %s", group, lhs, mode, clean_desc),
+            })
+            ::continue::
+        end
+    end
+
+    table.sort(entries, function(a, b) return a.ordinal < b.ordinal end)
+
+    pickers.new({}, {
+        prompt_title = "Keymaps",
+        finder = finders.new_table({
+            results = entries,
+            entry_maker = function(e)
+                return { value = e, display = e.display, ordinal = e.ordinal }
+            end,
+        }),
+        sorter = conf.generic_sorter({}),
+        previewer = false,
+    }):find()
+end
+
+vim.keymap.set("n", "<leader>fk", keymap_picker, { desc = "[Telescope] search keymaps" })
+
 vim.g.rustaceanvim = {
     server = {
         on_attach = rust_keymaps,
